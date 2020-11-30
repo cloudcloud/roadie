@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+roadie
 
 # Test binary, built with `go test -c`
 *.test
@@ -15,4 +16,7 @@
 # Dependency directories (remove the comment below to include it)
 node_modules
 dist
-roadie/assets.go
+pkg/server/assets.go
+
+# Data
+config.roadie.json
