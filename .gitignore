@@ -13,10 +13,11 @@ roadie
 *.out
 *log
 
-# Dependency directories (remove the comment below to include it)
+# Dependency directories
 node_modules
 dist
 pkg/server/assets.go
 
 # Data
 config.roadie.json
+.envrc
