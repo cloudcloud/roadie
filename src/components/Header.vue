@@ -1,16 +1,15 @@
 <template>
   <div>
-    <v-toolbar class="white--text" color="primary" app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span class="font-weight-light">roadie</span>
-      </v-toolbar-title>
+    <v-app-bar color="secondary" app>
+      <v-spacer />
 
-      <v-spacer></v-spacer>
+      <v-btn class="mx-2" ripple small to="/"><span>Home</span></v-btn>
+      <v-btn class="mx-2" ripple small to="/sources"><span>Sources</span></v-btn>
+      <v-btn class="mx-2" ripple small to="/destinations"><span>Destinations</span></v-btn>
+      <v-btn class="mx-2" ripple small to="/config"><span>Config</span></v-btn>
 
-      <v-btn flat to="/">
-        <span class="mr-2 white--text">Home</span>
-      </v-btn>
-    </v-toolbar>
+      <v-spacer />
+    </v-app-bar>
   </div>
 </template>
 
@@ -22,3 +21,5 @@ export default {
   methods: {}
 };
 </script>
+
+<style></style>

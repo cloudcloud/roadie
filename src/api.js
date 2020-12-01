@@ -6,7 +6,21 @@ const client = axios.create({
 })
 
 const apiClient = {
-  // apiFunction() {},
+  getDestinations() {
+    return this.perform('get', '/api/v1/destinations');
+  },
+
+  getHistorical() {
+    return this.perform('get', '/api/v1/historical');
+  },
+
+  getSource(source_name) {
+    return this.perform('get', `/api/v1/sources/${source_name}`);
+  },
+
+  getSources() {
+    return this.perform('get', '/api/v1/sources');
+  },
 
   async perform(method, resource, data) {
     return client({

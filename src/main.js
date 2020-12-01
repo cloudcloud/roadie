@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import './plugins/vuetify'
+import vuetify from './plugins/vuetify';
 import App from './App.vue'
 import router from './routes'
 import store from './store'
@@ -7,6 +7,7 @@ import store from './store'
 Vue.config.productionTip = process.env.NODE_ENV == 'production'
 
 new Vue({
+  vuetify,
   store,
   router,
   render: h => h(App),
