@@ -48,3 +48,10 @@ test: install ; $(info $(C) running tests)
 local:
 	$V GOOS=darwin $(MAKE) install
 	$V CONFIG_FILE=$(shell pwd)/config.roadie.json ./roadie
+
+docker:
+	$V docker build -t cloudcloud/roadie:latest .
+
+docker.push:
+	$V docker push cloudcloud/roadie:latest
+
