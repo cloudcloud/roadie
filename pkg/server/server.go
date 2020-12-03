@@ -52,7 +52,7 @@ func New(c types.Configer) Server {
 			AllowHeaders: []string{"Origin", "X-Client", "Content-Type"},
 		}),
 		logger(c),
-		pushData(c),
+		push(c),
 	)
 
 	g.StaticFS("/js",
@@ -96,9 +96,11 @@ func (s *Serve) Start() error {
 	return s.g.Run(s.c.GetListener())
 }
 
-func pushData(c types.Configer) gin.HandlerFunc {
+func push(c types.Configer) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		ctx.Set("data", data.New(c))
+		ctx.Set("config", c)
+		ctx.Next()
 	}
 }
 

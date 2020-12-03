@@ -13,6 +13,7 @@ import (
 // Config is a structure to provide the necessary configuration for
 // ensuring roadie will act in the expected fashion.
 type Config struct {
+	Hostname string `json:"hostname"`
 	Listener string `json:"listener"`
 	Location string `json:"location"`
 }
@@ -30,7 +31,13 @@ func New() (types.Configer, error) {
 		conf = "/config.roadie.json"
 	}
 
+	h := os.Getenv("HOSTNAME")
+	if h == "" {
+		h = "http://localhost:8080"
+	}
+
 	return &Config{
+		Hostname: h,
 		Listener: fmt.Sprintf(":%d", l),
 		Location: conf,
 	}, nil
@@ -39,6 +46,11 @@ func New() (types.Configer, error) {
 // GetConfigFile will provide the path to load the config data from.
 func (c *Config) GetConfigFile() string {
 	return c.Location
+}
+
+// GetHostname will retrieve the currently configured hostname.
+func (c *Config) GetHostname() string {
+	return c.Hostname
 }
 
 // GetListener will provide the listener entry for the HTTP server.

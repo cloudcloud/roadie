@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const el = document.getElementById('config');
+const c = JSON.parse(el.innerHTML);
 const client = axios.create({
-  baseURL: 'http://localhost:8008',
+  baseURL: c.hostname,
   json: true,
 })
 

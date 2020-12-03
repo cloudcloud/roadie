@@ -9,6 +9,7 @@ import (
 // of configuration struct.
 type Configer interface {
 	GetConfigFile() string
+	GetHostname() string
 	GetListener() string
 	GetLogger() *zap.SugaredLogger
 }
