@@ -30,6 +30,12 @@ func New(c types.Configer) *Data {
 	return d
 }
 
+func (d *Data) Copy(b types.ExecutePayload) interface{} {
+	//
+
+	return b
+}
+
 func (d *Data) GetDestination(s string) types.Destination {
 	for _, x := range d.f.Destinations {
 		if x.Name == s {

@@ -36,7 +36,7 @@
           </v-card-subtitle>
 
           <v-card-text>
-            <v-combobox dense outlined persistent-hint solo autofocus item-text="location" :items="destinations"></v-combobox>
+            <v-combobox dense outlined persistent-hint solo autofocus v-model="destination" item-text="location" :items="destinations"></v-combobox>
           </v-card-text>
 
           <v-card-actions>
@@ -68,12 +68,11 @@ export default {
     entry: '',
     loading: false,
     destinations: [],
+    destination: '',
   }),
   props: ['source_name'],
   created() {
-    this.$store.dispatch('getSource', this.source_name.trim().toLowerCase()).then(() => {
-      this.loadSource();
-    })
+    this.loadSource();
   },
   methods: {
     close() {
@@ -85,18 +84,31 @@ export default {
       this.destinations = this.$store.getters.allDestinations;
     },
     loadSource() {
-      this.source = this.$store.getters.allSource;
+      this.$store.dispatch('getSource', this.source_name.trim().toLowerCase()).then(() => {
+        this.source = this.$store.getters.allSource;
+      });
+      var c = this.$store.getters.getCopyState;
+      this.loading = c.loading;
     },
     save() {
       this.loading = true;
-      this.close();
-      this.loading = false;
+      var s = this.source;
+      s.entry = this.entry;
+      s.entries = [];
+
+      this.$store.dispatch('pushCopy', {
+        source: s,
+        destination: this.destination,
+      }).then(() => {
+        this.loadSource();
+        this.close();
+      });
     },
     ...mapMutations(['resetSource']),
     ...mapActions(['getSource']),
   },
   computed: {
-    ...mapGetters(['allSource']),
+    ...mapGetters(['allSource', 'getCopyState']),
   },
 };
 </script>

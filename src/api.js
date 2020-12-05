@@ -24,6 +24,10 @@ const apiClient = {
     return this.perform('get', '/api/v1/sources');
   },
 
+  pushCopy(payload) {
+    return this.perform('post', '/api/v1/execute', payload);
+  },
+
   async perform(method, resource, data) {
     return client({
       method,

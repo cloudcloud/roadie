@@ -11,6 +11,11 @@ export default new Vuex.Store({
     destinations: [],
     historical: [],
     source: {},
+    copy: {
+      loading: false,
+      source: {},
+      destination: {},
+    },
   },
   mutations: {
     resetHistorical(state, historical) {
@@ -25,6 +30,13 @@ export default new Vuex.Store({
     resetSource(state, source) {
       state.source = source;
     },
+    resetCopy(state, {source, destination}) {
+      state.copy = {
+        loading: false,
+        source: source,
+        destination: destination,
+      };
+    },
   },
   getters: {
     allHistorical: state => {
@@ -38,6 +50,9 @@ export default new Vuex.Store({
     },
     allSource: state => {
       return state.source;
+    },
+    getCopyState: state => {
+      return state.copy;
     },
   },
   actions: {
@@ -74,6 +89,12 @@ export default new Vuex.Store({
           commit('resetSource', data.items);
           resolve();
         });
+      });
+    },
+
+    pushCopy({commit}, payload) {
+      return apiClient.pushCopy(payload).then((data) => {
+        commit('resetCopy', data.items);
       });
     },
   }

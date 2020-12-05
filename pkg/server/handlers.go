@@ -19,7 +19,12 @@ func destinations(c *gin.Context) {
 }
 
 func execute(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": "execute"})
+	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
+		body := types.ExecutePayload{}
+		ctx.BindJSON(&body)
+
+		return d.Copy(body), []string{}
+	})
 }
 
 func historical(c *gin.Context) {

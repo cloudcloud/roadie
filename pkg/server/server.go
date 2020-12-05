@@ -82,7 +82,7 @@ func New(c types.Configer) Server {
 	api.GET("/sources", sources)
 	api.GET("/sources/:name", source)
 	api.GET("/destinations", destinations)
-	api.GET("/execute", execute)
+	api.POST("/execute", execute)
 	api.GET("/historical", historical)
 
 	return &Serve{

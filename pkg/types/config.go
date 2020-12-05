@@ -46,6 +46,12 @@ type Source struct {
 	Type     string `json:"type"`
 }
 
+// SourceReference is a single reference entry located within a source.
+type SourceReference struct {
+	Reference
+	Source
+}
+
 // ConfigFile contains the data form of our the configuration for
 // this instance of roadie.
 type ConfigFile struct {
@@ -62,4 +68,15 @@ type ConfigFile struct {
 
 	// Sources is the list of sources from which data can be selected.
 	Sources []Source `json:"sources"`
+}
+
+// ExecutePayload defines the incoming data request for carrying out
+// a copy at the request of the user.
+type ExecutePayload struct {
+	// Source is the reference for the originating reference.
+	Source SourceReference `json:"source"`
+
+	// Destination is the location for which the source should be
+	// copied over to.
+	Destination Destination `json:"destination"`
 }
