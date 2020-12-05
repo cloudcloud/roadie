@@ -92,9 +92,8 @@ export default {
     },
     save() {
       this.loading = true;
-      var s = this.source;
+      var s = Object.assign({}, this.source.source);
       s.entry = this.entry;
-      s.entries = [];
 
       this.$store.dispatch('pushCopy', {
         source: s,
