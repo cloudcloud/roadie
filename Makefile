@@ -47,7 +47,7 @@ test: install ; $(info $(C) running tests)
 
 local:
 	$V GOOS=darwin $(MAKE) install
-	$V CONFIG_FILE=$(shell pwd)/config.roadie.json ./roadie
+	$V HOSTNAME=http://localhost:8008 CONFIG_FILE=$(shell pwd)/config.roadie.json ./roadie
 
 docker:
 	$V docker build -t cloudcloud/roadie:latest .
