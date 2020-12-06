@@ -87,8 +87,6 @@ export default {
       this.$store.dispatch('getSource', this.source_name.trim().toLowerCase()).then(() => {
         this.source = this.$store.getters.allSource;
       });
-      var c = this.$store.getters.getCopyState;
-      this.loading = c.loading;
     },
     save() {
       this.loading = true;
@@ -99,7 +97,7 @@ export default {
         source: s,
         destination: this.destination,
       }).then(() => {
-        this.loadSource();
+        this.loading = false;
         this.close();
       });
     },

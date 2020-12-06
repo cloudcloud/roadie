@@ -30,10 +30,17 @@ func New(c types.Configer) *Data {
 	return d
 }
 
-func (d *Data) Copy(b types.ExecutePayload) interface{} {
-	//
+func (d *Data) Copy(b types.ExecutePayload) types.ExecuteResult {
+	r := types.ExecuteResult{}
+	switch b.Source.Type {
+	case "s3":
+		s3 := NewS3(d.c, d.f, b.Source.Source)
+		r = s3.CopyTo(b.Source.Entry, b.Destination)
 
-	return b
+	case "s3_sync":
+	}
+
+	return r
 }
 
 func (d *Data) GetDestination(s string) types.Destination {

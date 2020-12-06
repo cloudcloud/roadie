@@ -80,3 +80,10 @@ type ExecutePayload struct {
 	// copied over to.
 	Destination Destination `json:"destination"`
 }
+
+// ExecuteResult provides structure on responding to a request for the
+// copy execution.
+type ExecuteResult struct {
+	Source
+	Destination
+}
