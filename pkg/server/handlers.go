@@ -12,6 +12,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func destination(c *gin.Context) {
+	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
+		return gin.H{
+			"destination": d.GetDestination(ctx.Param("name")),
+			"entries":     d.GetDestinationRefs(ctx.Param("name")),
+		}, []string{}
+	})
+}
+
 func destinations(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
 		return d.GetDestinations(), []string{}

@@ -53,6 +53,26 @@ func (d *Data) GetDestination(s string) types.Destination {
 	return types.Destination{}
 }
 
+func (d *Data) GetDestinationRefs(s string) []types.Reference {
+	r := []types.Reference{}
+	n := d.GetDestination(s)
+
+	switch n.Type {
+	case "local_path":
+		m, err := filepath.Glob(n.Location + string(filepath.Separator) + "*")
+		if err == nil {
+			for _, x := range m {
+				r = append(r, types.Reference{Entry: x})
+			}
+		} else {
+			d.c.GetLogger().With("error_message", err, "path", n.Location).Error("Unable to load files.")
+		}
+
+	}
+
+	return r
+}
+
 func (d *Data) GetDestinations() []types.Destination {
 	return d.f.Destinations
 }

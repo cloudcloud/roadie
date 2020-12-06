@@ -30,6 +30,9 @@ export default new Vuex.Store({
     resetSource(state, source) {
       state.source = source;
     },
+    resetDestination(state, destination) {
+      state.destination = destination;
+    },
     resetCopy(state, {source, destination}) {
       state.copy = {
         loading: false,
@@ -51,6 +54,9 @@ export default new Vuex.Store({
     allSource: state => {
       return state.source;
     },
+    allDestination: state => {
+      return state.destination;
+    },
     getCopyState: state => {
       return state.copy;
     },
@@ -60,6 +66,15 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         apiClient.getDestinations().then((data) => {
           commit('resetDestinations', data.items);
+          resolve();
+        });
+      });
+    },
+
+    getDestination({commit}, destination_name) {
+      return new Promise((resolve) => {
+        apiClient.getDestination(destination_name).then((data) => {
+          commit('resetDestination', data.items);
           resolve();
         });
       });
