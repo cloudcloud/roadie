@@ -85,6 +85,7 @@ func New(c types.Configer) Server {
 	api.GET("/destinations/:name", destination)
 	api.POST("/execute", execute)
 	api.GET("/historical", historical)
+	api.DELETE("/remove", remove)
 
 	return &Serve{
 		c: c,

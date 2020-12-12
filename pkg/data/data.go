@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/json"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"github.com/cloudcloud/roadie/pkg/types"
@@ -123,4 +124,26 @@ func (d *Data) GetSourceRefs(s string) []types.Reference {
 
 func (d *Data) GetSources() []types.Source {
 	return d.f.Sources
+}
+
+func (d *Data) RemoveFile(b types.DestinationReference) interface{} {
+	o := "File removed successfully."
+	switch b.Type {
+	case "local_path":
+		err := os.Remove(b.Entry)
+		if err != nil {
+			d.c.GetLogger().With("error_message", err, "entry", b.Entry).Error("Unable to remove file.")
+			o = err.Error()
+		}
+
+	case "local_path_recursive":
+		err := os.RemoveAll(b.Entry)
+		if err != nil {
+			d.c.GetLogger().With("error_message", err, "entry", b.Entry).Error("Unable to remove directory.")
+			o = err.Error()
+		}
+
+	}
+
+	return o
 }

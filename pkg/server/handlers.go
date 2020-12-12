@@ -60,6 +60,15 @@ func index(c *gin.Context) {
 	)
 }
 
+func remove(c *gin.Context) {
+	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
+		body := types.DestinationReference{}
+		ctx.BindJSON(&body)
+
+		return d.RemoveFile(body), []string{}
+	})
+}
+
 func source(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
 		return gin.H{

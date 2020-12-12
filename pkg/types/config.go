@@ -87,3 +87,10 @@ type ExecuteResult struct {
 	Source
 	Destination
 }
+
+// DestinationReference contains the structure for the combination of a
+// specific entry located within a particular Destination.
+type DestinationReference struct {
+	Reference
+	Destination
+}

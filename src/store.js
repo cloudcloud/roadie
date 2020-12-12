@@ -112,5 +112,13 @@ export default new Vuex.Store({
         commit('resetCopy', data.items);
       });
     },
+
+    removeFile({dispatch, commit}, payload) {
+      return apiClient.removeFile(payload).then(() => {
+        dispatch('getDestination', payload.name).then((data) => {
+          commit('resetDestination', data.items);
+        });
+      });
+    },
   }
 });

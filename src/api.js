@@ -32,6 +32,10 @@ const apiClient = {
     return this.perform('post', '/api/v1/execute', payload);
   },
 
+  removeFile(payload) {
+    return this.perform('delete', '/api/v1/remove', payload);
+  },
+
   async perform(method, resource, data) {
     return client({
       method,

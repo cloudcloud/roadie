@@ -35,10 +35,6 @@
             Removing {{ entry }}. Are you sure?
           </v-card-subtitle>
 
-          <v-card-text>
-            ...
-          </v-card-text>
-
           <v-card-actions>
             <v-card-actions>
               <v-spacer />
@@ -86,20 +82,17 @@ export default {
       });
     },
     save() {
-      //this.loading = true;
-      //var s = Object.assign({}, this.source.source);
-      //s.entry = this.entry;
+      this.loading = true;
+      var s = Object.assign({}, this.destination.destination);
+      s.entry = this.entry;
 
-      //this.$store.dispatch('pushCopy', {
-        //source: s,
-        //destination: this.destination,
-      //}).then(() => {
-        //this.loading = false;
-        //this.close();
-      //});
+      this.$store.dispatch('removeFile', s).then(() => {
+        this.loading = false;
+        this.close();
+      });
     },
     ...mapMutations(['resetDestination']),
-    ...mapActions(['getDestination']),
+    ...mapActions(['getDestination', 'removeFile']),
   },
   computed: {
     ...mapGetters(['allDestination']),
