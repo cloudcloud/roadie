@@ -16,6 +16,7 @@ export default new Vuex.Store({
       source: {},
       destination: {},
     },
+    destination: [],
   },
   mutations: {
     resetHistorical(state, historical) {
@@ -113,12 +114,8 @@ export default new Vuex.Store({
       });
     },
 
-    removeFile({dispatch, commit}, payload) {
-      return apiClient.removeFile(payload).then(() => {
-        dispatch('getDestination', payload.name).then((data) => {
-          commit('resetDestination', data.items);
-        });
-      });
+    removeFile(_, payload) {
+      return apiClient.removeFile(payload);
     },
   }
 });

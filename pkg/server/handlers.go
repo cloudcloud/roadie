@@ -8,22 +8,25 @@ import (
 	"time"
 
 	"github.com/cloudcloud/roadie/pkg/data"
+	dest "github.com/cloudcloud/roadie/pkg/destinations"
+	sour "github.com/cloudcloud/roadie/pkg/sources"
 	"github.com/cloudcloud/roadie/pkg/types"
 	"github.com/gin-gonic/gin"
 )
 
 func destination(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
+		n := dest.FromURL(ctx.Param("name"))
 		return gin.H{
-			"destination": d.GetDestination(ctx.Param("name")),
-			"entries":     d.GetDestinationRefs(ctx.Param("name")),
+			"destination": d.GetDestination(n),
+			"entries":     d.GetDestinationRefs(n),
 		}, []string{}
 	})
 }
 
 func destinations(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
-		return d.GetDestinations(), []string{}
+		return dest.PrepareList(d.GetDestinations()), []string{}
 	})
 }
 
@@ -31,6 +34,9 @@ func execute(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
 		body := types.ExecutePayload{}
 		ctx.BindJSON(&body)
+
+		body.SourceName = sour.FromURL(body.SourceName)
+		body.DestinationName = dest.FromURL(body.DestinationName)
 
 		return d.Copy(body), []string{}
 	})
@@ -62,25 +68,27 @@ func index(c *gin.Context) {
 
 func remove(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
-		body := types.DestinationReference{}
+		body := types.RemovePayload{}
 		ctx.BindJSON(&body)
 
+		body.DestinationName = dest.FromURL(body.DestinationName)
 		return d.RemoveFile(body), []string{}
 	})
 }
 
 func source(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
+		n := sour.FromURL(ctx.Param("name"))
 		return gin.H{
-			"source":  d.GetSource(ctx.Param("name")),
-			"entries": d.GetSourceRefs(ctx.Param("name")),
+			"source":  d.GetSource(n),
+			"entries": d.GetSourceRefs(n),
 		}, []string{}
 	})
 }
 
 func sources(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
-		return d.GetSources(), []string{}
+		return sour.PrepareList(d.GetSources()), []string{}
 	})
 }
 

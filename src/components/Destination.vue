@@ -83,12 +83,13 @@ export default {
     },
     save() {
       this.loading = true;
-      var s = Object.assign({}, this.destination.destination);
-      s.entry = this.entry;
-
-      this.$store.dispatch('removeFile', s).then(() => {
+      this.$store.dispatch('removeFile', {
+        destination_name: this.destination_name,
+        entry_name: this.entry,
+      }).then(() => {
         this.loading = false;
         this.close();
+        this.loadDestination();
       });
     },
     ...mapMutations(['resetDestination']),

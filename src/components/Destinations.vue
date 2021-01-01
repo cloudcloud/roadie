@@ -34,7 +34,7 @@ export default {
   data: () => ({
     headers: [
       {text: 'Name', align: 'left', value: 'name'},
-      {text: 'Location', align: 'left', value: 'location'},
+      {text: 'Location', align: 'left', value: 'config.location'},
       {text: 'Type', align: 'left', value: 'type'},
     ],
     destinations: [],

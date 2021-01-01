@@ -1,20 +1,27 @@
+// Package data is the general interface to all of the data points across roadie,
+// providing the method by which all sources and destinations are interacted with.
 package data
 
 import (
 	"encoding/json"
 	"io/ioutil"
-	"os"
-	"path/filepath"
 
+	"github.com/cloudcloud/roadie/pkg/destinations"
+	"github.com/cloudcloud/roadie/pkg/sources"
 	"github.com/cloudcloud/roadie/pkg/types"
 )
 
+// Data is the base store for working with all data, containing the configuration
+// this instance of roadie was provided with.
 type Data struct {
+	Content types.Configuration
+
 	l string
 	c types.Configer
 	f types.ConfigFile
 }
 
+// New will provision the data storage from the provided configuration.
 func New(c types.Configer) *Data {
 	d := &Data{
 		c: c,
@@ -27,25 +34,40 @@ func New(c types.Configer) *Data {
 		c.GetLogger().With("error_message", err).Fatal("Unable to open config.")
 	}
 
-	json.Unmarshal(content, &d.f)
+	json.Unmarshal(content, &d.Content)
+
+	// fill in each of the sources
+	for a, x := range d.Content.Sources {
+		store := sources.New(x.Type, c)
+
+		json.Unmarshal(x.Config, &store)
+		d.Content.Sources[a].Store = store
+	}
+
+	// fill in each of the destinations
+	for a, x := range d.Content.Destinations {
+		dest := destinations.New(x.Type, c)
+
+		json.Unmarshal(x.Config, &dest)
+		d.Content.Destinations[a].Store = dest
+	}
+
 	return d
 }
 
-func (d *Data) Copy(b types.ExecutePayload) types.ExecuteResult {
-	r := types.ExecuteResult{}
-	switch b.Source.Type {
-	case "s3":
-		s3 := NewS3(d.c, d.f, b.Source.Source)
-		r = s3.CopyTo(b.Source.Entry, b.Destination)
+// Copy will carry out a copy operation based on the incoming execution request.
+func (d *Data) Copy(b types.ExecutePayload) (r types.ExecuteResult) {
+	s := d.GetSource(b.SourceName)
+	ref := types.Reference{Entry: b.EntryName}
+	dest := d.GetDestination(b.DestinationName)
 
-	case "s3_sync":
-	}
-
-	return r
+	r.References, r.Error = s.Store.CopyTo(ref, dest)
+	return
 }
 
+// GetDestination will find and load the requested destination.
 func (d *Data) GetDestination(s string) types.Destination {
-	for _, x := range d.f.Destinations {
+	for _, x := range d.Content.Destinations {
 		if x.Name == s {
 			return x
 		}
@@ -54,36 +76,24 @@ func (d *Data) GetDestination(s string) types.Destination {
 	return types.Destination{}
 }
 
+// GetDestinationRefs will find and load the content within the requested destination.
 func (d *Data) GetDestinationRefs(s string) []types.Reference {
-	r := []types.Reference{}
-	n := d.GetDestination(s)
-
-	switch n.Type {
-	case "local_path":
-		m, err := filepath.Glob(n.Location + string(filepath.Separator) + "*")
-		if err == nil {
-			for _, x := range m {
-				r = append(r, types.Reference{Entry: x})
-			}
-		} else {
-			d.c.GetLogger().With("error_message", err, "path", n.Location).Error("Unable to load files.")
-		}
-
-	}
-
-	return r
+	return d.GetDestination(s).Store.GetRefs()
 }
 
+// GetDestinations will return a list of the available destinations.
 func (d *Data) GetDestinations() []types.Destination {
-	return d.f.Destinations
+	return d.Content.Destinations
 }
 
+// GetHistories will provide a list of the historical record from this configuration.
 func (d *Data) GetHistories() []types.History {
-	return d.f.Histories
+	return d.Content.Histories
 }
 
+// GetSource will find and load the requested source.
 func (d *Data) GetSource(s string) types.Source {
-	for _, x := range d.f.Sources {
+	for _, x := range d.Content.Sources {
 		if x.Name == s {
 			return x
 		}
@@ -92,58 +102,17 @@ func (d *Data) GetSource(s string) types.Source {
 	return types.Source{}
 }
 
+// GetSourceRefs will find and load the content within the requested source.
 func (d *Data) GetSourceRefs(s string) []types.Reference {
-	r := []types.Reference{}
-	n := d.GetSource(s)
-
-	switch n.Type {
-	case "local_path_recursive":
-		fallthrough
-	case "local_path":
-		m, err := filepath.Glob(n.Location + string(filepath.Separator) + "*")
-		if err == nil {
-			for _, x := range m {
-				r = append(r, types.Reference{Entry: x})
-			}
-		} else {
-			d.c.GetLogger().With("error_message", err, "path", n.Location).Error("Unable to load files.")
-		}
-
-	case "s3":
-		s3 := NewS3(d.c, d.f, n)
-		r = s3.RetrieveListing()
-
-	case "s3_sync":
-		s3 := NewS3Sync(d.c, d.f, n)
-		r = s3.RetrieveListing()
-
-	}
-
-	return r
+	return d.GetSource(s).Store.GetRefs()
 }
 
+// GetSources will provide a list of available sources.
 func (d *Data) GetSources() []types.Source {
-	return d.f.Sources
+	return d.Content.Sources
 }
 
-func (d *Data) RemoveFile(b types.DestinationReference) interface{} {
-	o := "File removed successfully."
-	switch b.Type {
-	case "local_path":
-		err := os.Remove(b.Entry)
-		if err != nil {
-			d.c.GetLogger().With("error_message", err, "entry", b.Entry).Error("Unable to remove file.")
-			o = err.Error()
-		}
-
-	case "local_path_recursive":
-		err := os.RemoveAll(b.Entry)
-		if err != nil {
-			d.c.GetLogger().With("error_message", err, "entry", b.Entry).Error("Unable to remove directory.")
-			o = err.Error()
-		}
-
-	}
-
-	return o
+// RemoveFile will carry out a removal operation based on the removal request input.
+func (d *Data) RemoveFile(b types.RemovePayload) interface{} {
+	return d.GetDestination(b.DestinationName).Store.RemoveFile(b.EntryName)
 }
