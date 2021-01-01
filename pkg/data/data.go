@@ -1,4 +1,5 @@
-// Package data
+// Package data is the general interface to all of the data points across roadie,
+// providing the method by which all sources and destinations are interacted with.
 package data
 
 import (
@@ -10,7 +11,8 @@ import (
 	"github.com/cloudcloud/roadie/pkg/types"
 )
 
-// Data
+// Data is the base store for working with all data, containing the configuration
+// this instance of roadie was provided with.
 type Data struct {
 	Content types.Configuration
 
@@ -19,7 +21,7 @@ type Data struct {
 	f types.ConfigFile
 }
 
-// New
+// New will provision the data storage from the provided configuration.
 func New(c types.Configer) *Data {
 	d := &Data{
 		c: c,
@@ -53,7 +55,7 @@ func New(c types.Configer) *Data {
 	return d
 }
 
-// Copy
+// Copy will carry out a copy operation based on the incoming execution request.
 func (d *Data) Copy(b types.ExecutePayload) (r types.ExecuteResult) {
 	s := d.GetSource(b.SourceName)
 	ref := types.Reference{Entry: b.EntryName}
@@ -63,7 +65,7 @@ func (d *Data) Copy(b types.ExecutePayload) (r types.ExecuteResult) {
 	return
 }
 
-// GetDestination
+// GetDestination will find and load the requested destination.
 func (d *Data) GetDestination(s string) types.Destination {
 	for _, x := range d.Content.Destinations {
 		if x.Name == s {
@@ -74,22 +76,22 @@ func (d *Data) GetDestination(s string) types.Destination {
 	return types.Destination{}
 }
 
-// GetDestinationRefs
+// GetDestinationRefs will find and load the content within the requested destination.
 func (d *Data) GetDestinationRefs(s string) []types.Reference {
 	return d.GetDestination(s).Store.GetRefs()
 }
 
-// GetDestinations
+// GetDestinations will return a list of the available destinations.
 func (d *Data) GetDestinations() []types.Destination {
 	return d.Content.Destinations
 }
 
-// GetHistories
+// GetHistories will provide a list of the historical record from this configuration.
 func (d *Data) GetHistories() []types.History {
 	return d.Content.Histories
 }
 
-// GetSource
+// GetSource will find and load the requested source.
 func (d *Data) GetSource(s string) types.Source {
 	for _, x := range d.Content.Sources {
 		if x.Name == s {
@@ -100,17 +102,17 @@ func (d *Data) GetSource(s string) types.Source {
 	return types.Source{}
 }
 
-// GetSourceRefs
+// GetSourceRefs will find and load the content within the requested source.
 func (d *Data) GetSourceRefs(s string) []types.Reference {
 	return d.GetSource(s).Store.GetRefs()
 }
 
-// GetSources
+// GetSources will provide a list of available sources.
 func (d *Data) GetSources() []types.Source {
 	return d.Content.Sources
 }
 
-// RemoveFile
+// RemoveFile will carry out a removal operation based on the removal request input.
 func (d *Data) RemoveFile(b types.RemovePayload) interface{} {
 	return d.GetDestination(b.DestinationName).Store.RemoveFile(b.EntryName)
 }

@@ -9,14 +9,14 @@ import (
 	"github.com/cloudcloud/roadie/pkg/types"
 )
 
-// LocalPath
+// LocalPath is the source implementation of working with the local filesystem.
 type LocalPath struct {
 	Location string `json:"location"`
 
 	c types.Configer
 }
 
-// NewLocalPath
+// NewLocalPath will provision an instance of LocalPath.
 func NewLocalPath(c types.Configer) *LocalPath {
 	return &LocalPath{c: c}
 }
@@ -52,7 +52,7 @@ func (l *LocalPath) copyToPath(r types.Reference, d string) error {
 	return err
 }
 
-// GetRefs
+// GetRefs will retrieve a list of all files within the source location.
 func (l *LocalPath) GetRefs() (r []types.Reference) {
 	m, err := filepath.Glob(l.Location + string(filepath.Separator) + "*")
 	if err == nil {
@@ -66,7 +66,7 @@ func (l *LocalPath) GetRefs() (r []types.Reference) {
 	return
 }
 
-// Type
+// Type provides the name string for the LocalPath source type.
 func (l *LocalPath) Type() string {
 	return "local_path"
 }

@@ -24,7 +24,7 @@ type S3 struct {
 	s3         *s3.S3
 }
 
-// NewS3
+// NewS3 will provision an S3 source.
 func NewS3(c types.Configer) *S3 {
 	e := session.Must(session.NewSession())
 
@@ -35,7 +35,8 @@ func NewS3(c types.Configer) *S3 {
 	}
 }
 
-// CopyTo
+// CopyTo will carry out the copy operation from the current bucket
+// configuration into the provided destination.
 func (s *S3) CopyTo(r types.Reference, d types.Destination) (list []types.Reference, err error) {
 	refs := s.GetMatchingRefs(r)
 	switch d.Type {
@@ -68,7 +69,8 @@ func (s *S3) copyToPath(refs []types.Reference, p string) {
 	}
 }
 
-// GetMatchingRefs
+// GetMatchingRefs will pull a list of references from the bucket by using
+// the prefix capability of the S3 API for a specific file path.
 func (s *S3) GetMatchingRefs(r types.Reference) (refs []types.Reference) {
 	prefix := s.Path + "/" + r.Entry
 
@@ -90,7 +92,8 @@ func (s *S3) GetMatchingRefs(r types.Reference) (refs []types.Reference) {
 	return
 }
 
-// GetRefs
+// GetRefs will pull a full list of references for the bucket, taking into
+// account the nature of folder-structures with the depth.
 func (s *S3) GetRefs() (r []types.Reference) {
 	delim := "."
 	prefix := s.Path + "/"

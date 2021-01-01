@@ -1,3 +1,5 @@
+// Package sources provides implementations for the different types of source
+// configurations available.
 package sources
 
 import (
@@ -8,7 +10,7 @@ import (
 	"github.com/cloudcloud/roadie/pkg/types"
 )
 
-// New
+// New will provision a new source instance based on the requested type.
 func New(t string, c types.Configer) types.Sourcer {
 	switch t {
 	case "s3":
@@ -20,13 +22,15 @@ func New(t string, c types.Configer) types.Sourcer {
 	return nil
 }
 
-// FromURL
+// FromURL will take an expected source name from an external location
+// and turn it into what can be assumed as the internal reference.
 func FromURL(n string) string {
 	x, _ := url.PathUnescape(n)
 	return x
 }
 
-// PrepareList
+// PrepareList will decorate a list of sources with additional details
+// that are mostly useful externally.
 func PrepareList(s []types.Source) (o []types.Source) {
 	for _, x := range s {
 		t := types.Source{
