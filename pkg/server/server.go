@@ -99,8 +99,10 @@ func (s *Serve) Start() error {
 }
 
 func push(c types.Configer) gin.HandlerFunc {
+	d := data.New(c)
+
 	return func(ctx *gin.Context) {
-		ctx.Set("data", data.New(c))
+		ctx.Set("data", d)
 		ctx.Set("config", c)
 		ctx.Next()
 	}

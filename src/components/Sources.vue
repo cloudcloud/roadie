@@ -34,7 +34,8 @@ export default {
   data: () => ({
     headers: [
       {text: 'Name', align: 'left', value: 'name'},
-      {text: 'Location', align: 'left', value: 'location'},
+      {text: 'Bucket', align: 'left', value: 'config.bucket'},
+      {text: 'Path', align: 'left', value: 'config.path'},
       {text: 'Type', align: 'left', value: 'type'},
     ],
     sources: [],

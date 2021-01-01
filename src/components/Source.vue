@@ -36,7 +36,7 @@
           </v-card-subtitle>
 
           <v-card-text>
-            <v-combobox dense outlined persistent-hint solo autofocus v-model="destination" item-text="location" :items="destinations"></v-combobox>
+            <v-combobox dense outlined persistent-hint solo autofocus v-model="destination" item-text="name" :items="destinations"></v-combobox>
           </v-card-text>
 
           <v-card-actions>
@@ -90,12 +90,10 @@ export default {
     },
     save() {
       this.loading = true;
-      var s = Object.assign({}, this.source.source);
-      s.entry = this.entry;
-
       this.$store.dispatch('pushCopy', {
-        source: s,
-        destination: this.destination,
+        source_name: this.source.source.name,
+        entry_name: this.entry,
+        destination_name: this.destination.name,
       }).then(() => {
         this.loading = false;
         this.close();
