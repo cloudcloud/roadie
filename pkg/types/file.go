@@ -5,6 +5,7 @@ package types
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // Configuration defines the overall structure of the content from
@@ -30,10 +31,12 @@ type Destination struct {
 // History is a single record for a copy execution, or some other
 // state modification by roadie.
 type History struct {
-	Config      json.RawMessage `json:"config"`
+	Config      json.RawMessage `json:"config,omitempty"`
 	Destination Destination     `json:"destination"`
+	OccurredAt  time.Time       `json:"occurred_at"`
 	Pattern     string          `json:"pattern"`
 	Source      Source          `json:"source"`
+	State       string          `json:"state"`
 }
 
 // Source is a structured representation of the original location

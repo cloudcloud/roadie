@@ -33,17 +33,20 @@ func FromURL(n string) string {
 // that are mostly useful externally.
 func PrepareList(s []types.Source) (o []types.Source) {
 	for _, x := range s {
-		t := types.Source{
-			Href: sourceURL(x.Name),
-			Name: x.Name,
-			Type: x.Type,
-		}
-
-		b, _ := json.Marshal(x.Store)
-		t.Config = json.RawMessage(b)
-
-		o = append(o, t)
+		o = append(o, PrepareSource(x))
 	}
+
+	return
+}
+
+// PrepareSource will decorate a single Source entry with external details.
+func PrepareSource(s types.Source) (o types.Source) {
+	o.Href = sourceURL(s.Name)
+	o.Name = s.Name
+	o.Type = s.Type
+
+	b, _ := json.Marshal(s.Store)
+	o.Config = json.RawMessage(b)
 
 	return
 }

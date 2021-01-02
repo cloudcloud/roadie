@@ -14,11 +14,11 @@
         <v-flex mb-3>
           <v-data-table :headers="headers" :items="historical" class="elevation-1">
 
-            <template v-slot:item.source.location="{ item }">
+            <template v-slot:item.source.name="{ item }">
               <router-link :to="item.source.href">{{ item.source.name }}</router-link>
             </template>
 
-            <template v-slot:item.destination.location="{ item }">
+            <template v-slot:item.destination.name="{ item }">
               <router-link :to="item.destination.href">{{ item.destination.name }}</router-link>
             </template>
 
@@ -36,10 +36,10 @@ import { mapActions, mapMutations, mapGetters } from 'vuex';
 export default {
   data: () => ({
     headers: [
-      {text: 'Source', align: 'left', value: 'source.location'},
-      {text: 'Destination', align: 'left', value: 'destination.location'},
+      {text: 'Source', align: 'left', value: 'source.name'},
+      {text: 'Destination', align: 'left', value: 'destination.name'},
       {text: 'Pattern', align: 'left', value: 'pattern'},
-      {text: 'Date', align: 'left', value: 'date'},
+      {text: 'Date', align: 'left', value: 'occurred_at'},
     ],
     historical: [],
   }),
