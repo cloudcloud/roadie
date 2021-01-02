@@ -198,7 +198,7 @@ workflows:
 
       - images:
           requires:
-            - be-tests
+            - be-compile
           filters:
             branches:
               ignore: /.*/
