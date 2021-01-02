@@ -44,7 +44,13 @@ func execute(c *gin.Context) {
 
 func historical(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
-		return d.GetHistories(), []string{}
+		h := d.GetHistories()
+		for a, x := range h {
+			h[a].Destination = dest.PrepareDestination(x.Destination)
+			h[a].Source = sour.PrepareSource(x.Source)
+		}
+
+		return h, []string{}
 	})
 }
 
@@ -80,7 +86,7 @@ func source(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
 		n := sour.FromURL(ctx.Param("name"))
 		return gin.H{
-			"source":  d.GetSource(n),
+			"source":  sour.PrepareSource(d.GetSource(n)),
 			"entries": d.GetSourceRefs(n),
 		}, []string{}
 	})

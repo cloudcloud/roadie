@@ -30,17 +30,21 @@ func FromURL(u string) string {
 // destinations that is primarily useful for external contexts.
 func PrepareList(d []types.Destination) (o []types.Destination) {
 	for _, x := range d {
-		t := types.Destination{
-			Href: destinationURL(x.Name),
-			Name: x.Name,
-			Type: x.Type,
-		}
-
-		b, _ := json.Marshal(x.Store)
-		t.Config = json.RawMessage(b)
-
-		o = append(o, t)
+		o = append(o, PrepareDestination(x))
 	}
+
+	return
+}
+
+// PrepareDestination will decorate a single destination with details useful
+// in an external context.
+func PrepareDestination(d types.Destination) (o types.Destination) {
+	o.Href = destinationURL(d.Name)
+	o.Name = d.Name
+	o.Type = d.Type
+
+	b, _ := json.Marshal(d.Store)
+	o.Config = json.RawMessage(b)
 
 	return
 }
