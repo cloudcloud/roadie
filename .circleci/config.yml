@@ -17,7 +17,9 @@ aliases:
 version: 2
 jobs:
   build:
-    environment: *default-env
+    environment:
+      GO111MODULE: on
+      PROJECT: roadie
     working_directory: *working-dir
     docker:
       - image: golang:1.15-buster
