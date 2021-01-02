@@ -6,8 +6,7 @@ bin-prep: ; $(info $(C) preparing for bin-data)
 	$V GO111MODULE=off go get -u github.com/kevinburke/go-bindata/...
 
 bin-dist: ; $(info $(C) collapsing files into bin-data)
-	$V go-bindata -o ./pkg/server/assets.go -prefix dist/ dist/...
-	$V sed -i '' "s/package main/package server/g" ./pkg/server/assets.go
+	$V go-bindata -o ./pkg/server/assets.go -pkg server -prefix dist/ dist/...
 
 binaries: ; $(info $(C) building all binaries)
 	$V $(MAKE) binary GOARCH=amd64 GOOS=linux
