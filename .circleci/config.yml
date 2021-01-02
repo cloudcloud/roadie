@@ -1,7 +1,7 @@
 aliases:
   - &default-env
-    GO111MODULE: on
-    PROJECT: roadie
+    GO111MODULE: "on"
+    PROJECT: "roadie"
 
   - &working-dir
     /go/roadie
@@ -18,8 +18,8 @@ version: 2
 jobs:
   build:
     environment:
-      GO111MODULE: on
-      PROJECT: roadie
+      GO111MODULE: "on"
+      PROJECT: "roadie"
     working_directory: *working-dir
     docker:
       - image: golang:1.15-buster
