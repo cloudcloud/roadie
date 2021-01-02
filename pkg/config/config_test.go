@@ -36,3 +36,9 @@ func TestNew(t *testing.T) {
 		}
 	}
 }
+
+func TestNopBreakCircleCache(t *testing.T) {
+	assert := assert.New(t)
+
+	assert.True(true)
+}
