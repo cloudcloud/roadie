@@ -17,7 +17,7 @@ func TestNew(t *testing.T) {
 	}{
 		{
 			Error:    false,
-			Expected: &Config{Hostname: "http://localhost:8080", Listener: ":8008", Location: "/config.roadie.json"},
+			Expected: &Config{Listener: ":8008", Location: "/config.roadie.json"},
 			Port:     "",
 		},
 	}
@@ -26,7 +26,9 @@ func TestNew(t *testing.T) {
 		os.Setenv("PORT", x.Port)
 
 		actual, err := New()
-		assert.Equal(x.Expected, actual)
+		assert.Equal(x.Expected.Listener, actual.GetListener())
+		assert.Equal(x.Expected.Location, actual.GetConfigFile())
+
 		if !x.Error {
 			assert.Nil(err)
 		} else {
