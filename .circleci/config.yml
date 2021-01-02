@@ -70,8 +70,7 @@ jobs:
       - run:
           name: Compile backend
           command: |
-            go-bindata -o ./pkg/server/assets.go -prefix dist/ dist/...
-            sed -i "s/package main/package server/" ./pkg/server/assets.go
+            go-bindata -o ./pkg/server/assets.go -pkg server -prefix dist/ dist/...
       - persist_to_workspace: *workspace-persist
 
   be-tests:
@@ -106,7 +105,7 @@ jobs:
           at: /go/
       - run:
           name: Prepare assets
-          command: go-bindata -o pkg/server/assets.go -prefix dist/ dist/...
+          command: go-bindata -o pkg/server/assets.go -pkg server -prefix dist/ dist/...
       - run:
           name: Build amd64-linux
           environment:
