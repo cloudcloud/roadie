@@ -18,7 +18,6 @@ type Data struct {
 
 	l string
 	c types.Configer
-	f types.ConfigFile
 }
 
 // New will provision the data storage from the provided configuration.
