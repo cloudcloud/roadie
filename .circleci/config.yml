@@ -47,7 +47,6 @@ jobs:
     steps:
       - attach_workspace:
           at: /go/
-      - checkout
       - run:
           name: Compile the Frontend
           command: |
@@ -55,6 +54,21 @@ jobs:
       - store_artifacts:
           path: dist
           destination: frontend
+      - persist_to_workspace: *workspace-persist
+
+  be-compile:
+    environment: *default-env
+    working_directory: *working-dir
+    docker:
+      - image golang:1.15-buster
+    steps:
+      - attach_workspace:
+          at: /go/
+      - run:
+          name: Compile backend
+          command: |
+            go-bindata -o ./pkg/server/assets.go -prefix dist/ dist/...
+            sed -i "s/package main/package server/" ./pkg/server/assets.go
       - persist_to_workspace: *workspace-persist
 
   be-tests:
@@ -69,8 +83,6 @@ jobs:
           name: Test backend
           command: |
             cc-test-reporter before-build
-            go-bindata -o ./pkg/server/assets.go -prefix dist/ dist/...
-            sed -i "s/package main/package server/" ./pkg/server/assets.go
             go test -coverprofile=c.out -covermode=atomic -race ./...
             RESULT=$?
             sed -i s#github.com/cloudcloud/${PROJECT}/## c.out
@@ -167,12 +179,19 @@ workflows:
             tags:
               only: /.*/
 
-      - be-tests:
+      - be-compile:
           requires:
             - fe-compile
           filters:
             tags:
               only: /.*/
+
+      - be-tests:
+          requires:
+            - be-compile
+          filters:
+            tags:
+              ignore: /.*/
 
       - images:
           requires:
