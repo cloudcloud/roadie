@@ -4,7 +4,7 @@ WORKDIR "/app"
 COPY yarn.lock yarn.lock
 COPY package.json package.json
 COPY babel.config.js babel.config.js
-RUN yarn
+RUN yarn --frozen-lockfile --silent --non-interactive --link-duplicates
 
 COPY public public
 COPY src src
