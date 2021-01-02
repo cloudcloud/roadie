@@ -5,10 +5,17 @@ package data
 import (
 	"encoding/json"
 	"io/ioutil"
+	"time"
 
 	"github.com/cloudcloud/roadie/pkg/destinations"
 	"github.com/cloudcloud/roadie/pkg/sources"
 	"github.com/cloudcloud/roadie/pkg/types"
+)
+
+const (
+	StateSuccess = "success"
+	StateFail    = "fail"
+	StateUnknown = "unknown"
 )
 
 // Data is the base store for working with all data, containing the configuration
@@ -54,6 +61,20 @@ func New(c types.Configer) *Data {
 	return d
 }
 
+// AddHistory will accept some detail about a particular event that has occured.
+func (d *Data) AddHistory(s types.Source, t types.Destination, e string, state string) error {
+	h := types.History{
+		Destination: t,
+		OccurredAt:  time.Now(),
+		Pattern:     e,
+		Source:      s,
+		State:       state,
+	}
+
+	d.Content.Histories = append(d.Content.Histories, h)
+	return d.Write()
+}
+
 // Copy will carry out a copy operation based on the incoming execution request.
 func (d *Data) Copy(b types.ExecutePayload) (r types.ExecuteResult) {
 	s := d.GetSource(b.SourceName)
@@ -61,6 +82,13 @@ func (d *Data) Copy(b types.ExecutePayload) (r types.ExecuteResult) {
 	dest := d.GetDestination(b.DestinationName)
 
 	r.References, r.Error = s.Store.CopyTo(ref, dest)
+
+	if r.Error != nil {
+		d.AddHistory(s, dest, b.EntryName, StateFail)
+	} else {
+		d.AddHistory(s, dest, b.EntryName, StateSuccess)
+	}
+
 	return
 }
 
@@ -112,6 +140,27 @@ func (d *Data) GetSources() []types.Source {
 }
 
 // RemoveFile will carry out a removal operation based on the removal request input.
-func (d *Data) RemoveFile(b types.RemovePayload) interface{} {
-	return d.GetDestination(b.DestinationName).Store.RemoveFile(b.EntryName)
+func (d *Data) RemoveFile(b types.RemovePayload) error {
+	dest := d.GetDestination(b.DestinationName)
+	err := dest.Store.RemoveFile(b.EntryName)
+
+	if err != nil {
+		d.AddHistory(types.Source{}, dest, b.EntryName, StateFail)
+	} else {
+		d.AddHistory(types.Source{}, dest, b.EntryName, StateSuccess)
+	}
+
+	return err
+}
+
+// Write will take all loaded configuration data and write it back to the provided
+// configuration file.
+func (d *Data) Write() error {
+	j, err := json.MarshalIndent(d.Content, "", "  ")
+	if err != nil {
+		d.c.GetLogger().With("error_message", err).Error("Couldn't marshal indent.")
+		return err
+	}
+
+	return ioutil.WriteFile(d.l, j, 0644)
 }
