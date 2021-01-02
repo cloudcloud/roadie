@@ -1,7 +1,12 @@
 FROM node:slim AS fe
 
-COPY . .
-RUN yarn && yarn build
+COPY yarn.lock yarn.lock
+COPY package.json package.json
+COPY babel.config.js babel.config.js
+RUN yarn
+
+COPY src src
+RUN yarn build
 
 FROM golang:alpine AS be
 
