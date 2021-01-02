@@ -1,30 +1,19 @@
 <template>
-  <v-container fluid grid-list-sm>
-    <v-layout row wrap>
+  <v-card>
 
-      <v-toolbar flat color="white">
-        <v-toolbar-title>roadie</v-toolbar-title>
-        <v-divider class="mx-2" inset vertical></v-divider>
-        <span>destinations</span>
-        <v-spacer />
-      </v-toolbar>
-    </v-layout>
+    <v-card-title>
+      destinations
+      <v-spacer></v-spacer>
+      <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
+    </v-card-title>
 
-    <v-layout row wrap>
-      <v-container mt-0 pt-0 xs12>
-        <v-flex mb-3>
-          <v-data-table :headers="headers" :items="destinations" class="elevation-1">
+    <v-data-table :headers="headers" :items="destinations" :search="search" class="elevation-1">
+      <template v-slot:item.name="{ item }">
+        <router-link :to="item.href">{{ item.name }}</router-link>
+      </template>
+    </v-data-table>
 
-            <template v-slot:item.name="{ item }">
-              <router-link :to="item.href">{{ item.name }}</router-link>
-            </template>
-
-          </v-data-table>
-        </v-flex>
-      </v-container>
-
-    </v-layout>
-  </v-container>
+  </v-card>
 </template>
 
 <script>
@@ -38,6 +27,7 @@ export default {
       {text: 'Type', align: 'left', value: 'type'},
     ],
     destinations: [],
+    search: '',
   }),
   props: [],
   created() {
