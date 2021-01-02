@@ -24,7 +24,7 @@ jobs:
     steps:
       - checkout
       - restore-cache:
-          key: v1-deps-{{ checksum "go.sum" }}
+          key: v2-deps-{{ checksum "go.sum" }}
       - run:
           name: Prep Local
           command: |
@@ -39,7 +39,7 @@ jobs:
             - /go/roadie/node_modules
             - /go/pkg
             - /go/bin
-          key: v1-deps-{{ checksum "go.sum" }}
+          key: v2-deps-{{ checksum "go.sum" }}
 
   fe-compile:
     environment: *default-env
@@ -49,6 +49,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /go/
+      - checkout
       - run:
           name: Compile the Frontend
           command: |
