@@ -1,0 +1,188 @@
+aliases:
+  - &default-env
+    GO111MODULE=on
+    PROJECT=roadie
+
+  - &working-dir
+    /go/roadie
+
+  - &workspace-persist
+    root: /go/
+    paths:
+      - roadie
+      - bin
+      - pkg
+      - src
+
+version: 2
+jobs:
+  build:
+    environment: *default-env
+    working_directory: *working-dir
+    docker:
+      - image: golang:1.15-stretch
+    steps:
+      - checkout
+      - restore-cache:
+          key: v1-deps-{{ checksum "go.sum" }}
+      - run:
+          name: Prep Local
+          command: |
+            go mod download
+            GO111MODULE=off go get -u github.com/kevinburke/go-bindata/...
+            GO111MODULE=off go get -u github.com/tcnksm/ghr
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /go/bin/cc-test-reporter
+            chmod +x /go/bin/cc-test-reporter
+      - persist_to_workspace: *workspace-persist
+      - save-cache:
+          paths:
+            - /go/
+          key: v1-deps-{{ checksum "go.sum" }}
+
+  fe-compile:
+    environment: *default-env
+    working_directory: *working-dir
+    docker:
+      - image: vuejs/ci
+    steps:
+      - attach_workspace:
+          at: /go/
+      - run:
+          name: Compile the Frontend
+          command: |
+            yarn && yarn build
+      - store_artifacts:
+          path: dist
+          destination: frontend
+      - persist_to_workspace: *workspace-persist
+
+  be-tests:
+    environment: *default-env
+    working_directory: *working-dir
+    docker:
+      - image: golang:1.15-stretch
+    steps:
+      - attach_workspace:
+          at: /go/
+      - run:
+          name: Test backend
+          command: |
+            cc-test-reporter before-build
+            go-bindata -o ./pkg/server/assets.go -prefix dist/ dist/...
+            sed -i "s/package main/package server/" ./pkg/server/assets.go
+            go test -coverprofile=c.out -covermode=atomic -race ./...
+            RESULT=$?
+            sed -i s#github.com/cloudcloud/${PROJECT}/## c.out
+            sed -i '/^pkg\/server\/assets.go.*/d' c.out
+            cc-test-reporter after-build -t gocov --exit-code $RESULT
+      - store_artifacts:
+          path: c.out
+          destination: test-coverage
+      - persist_to_workspace: *workspace-persist
+
+  images:
+    environment: *default-env
+    working_directory: *working-dir
+    docker:
+      - image: golang:1.15-stretch
+    steps:
+      - attach_workspace:
+          at: /go/
+      - run:
+          name: Prepare assets
+          command: go-bindata -o pkg/server/assets.go -prefix dist/ dist/...
+      - run:
+          name: Build amd64-linux
+          environment:
+            GOARCH: amd64
+            GOOS: linux
+          command: go build -o build/${PROJECT}.${GOARCH}-${GOOS} ./cmd/${PROJECT}
+      - run:
+          name: Build amd64-darwin
+          environment:
+            GOARCH: amd64
+            GOOS: darwin
+          command: go build -o build/${PROJECT}.${GOARCH}-${GOOS} ./cmd/${PROJECT}
+      - run:
+          name: Build amd64-windows
+          environment:
+            GOARCH: amd64
+            GOOS: windows
+          command: go build -o build/${PROJECT}.${GOARCH}-${GOOS}.exe ./cmd/${PROJECT}
+      - run:
+          name: Build 386-linux
+          environment:
+            GOARCH: '386'
+            GOOS: linux
+          command: go build -o build/${PROJECT}.${GOARCH}-${GOOS} ./cmd/${PROJECT}
+      - run:
+          name: Build 386-windows
+          environment:
+            GOARCH: '386'
+            GOOS: windows
+          command: go build -o build/${PROJECT}.${GOARCH}-${GOOS}.exe ./cmd/${PROJECT}
+      - run:
+          name: Push to github
+          command: |
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ./build/
+      - store_artifacts:
+          path: build
+          destination: binaries
+      - persist_to_workspace: *workspace-persist
+
+  docker-image:
+    environment: *default-env
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: image build
+          command: |
+            docker build --rm=false -t cloudcloud/${PROJECT}:${CIRCLE_TAG} .
+            echo ${DOCKERHUB_PASSWORD} | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+            docker push cloudcloud/${PROJECT}:${CIRCLE_TAG}
+
+workflows:
+  version: 2
+
+  roadie:
+    jobs:
+      - build:
+        filters:
+          tags:
+            only: /.*/
+
+      - fe-compile:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+
+      - be-tests:
+          requires:
+            - fe-compile
+          filters:
+            tags:
+              only: /.*/
+
+      - images:
+          requires:
+            - be-tests
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
+      - docker-image:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
