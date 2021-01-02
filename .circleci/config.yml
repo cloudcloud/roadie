@@ -96,30 +96,35 @@ jobs:
           environment:
             GOARCH: amd64
             GOOS: linux
+            PROJECT: roadie
           command: go build -o build/${PROJECT}.${GOARCH}-${GOOS} ./cmd/${PROJECT}
       - run:
           name: Build amd64-darwin
           environment:
             GOARCH: amd64
             GOOS: darwin
+            PROJECT: roadie
           command: go build -o build/${PROJECT}.${GOARCH}-${GOOS} ./cmd/${PROJECT}
       - run:
           name: Build amd64-windows
           environment:
             GOARCH: amd64
             GOOS: windows
+            PROJECT: roadie
           command: go build -o build/${PROJECT}.${GOARCH}-${GOOS}.exe ./cmd/${PROJECT}
       - run:
           name: Build 386-linux
           environment:
             GOARCH: '386'
             GOOS: linux
+            PROJECT: roadie
           command: go build -o build/${PROJECT}.${GOARCH}-${GOOS} ./cmd/${PROJECT}
       - run:
           name: Build 386-windows
           environment:
             GOARCH: '386'
             GOOS: windows
+            PROJECT: roadie
           command: go build -o build/${PROJECT}.${GOARCH}-${GOOS}.exe ./cmd/${PROJECT}
       - run:
           name: Push to github
@@ -150,9 +155,9 @@ workflows:
   roadie:
     jobs:
       - build:
-        filters:
-          tags:
-            only: /.*/
+          filters:
+            tags:
+              only: /.*/
 
       - fe-compile:
           requires:
