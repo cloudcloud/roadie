@@ -1,33 +1,22 @@
 <template>
-  <v-container fluid grid-list-sm>
-    <v-layout row wrap>
-      <v-toolbar flat color="white">
-        <v-toolbar-title>roadie</v-toolbar-title>
-        <v-divider class="mx-2" inset vertical></v-divider>
-        <span class="mr-2">history</span>
-        <v-spacer />
-      </v-toolbar>
-    </v-layout>
+  <v-card>
 
-    <v-layout row wrap>
-      <v-container mt-0 pt-0 xs12>
-        <v-flex mb-3>
-          <v-data-table :headers="headers" :items="historical" class="elevation-1">
+    <v-card-title>
+      <span>roadie</span>
+      <v-spacer />
+      <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+    </v-card-title>
 
-            <template v-slot:item.source.name="{ item }">
-              <router-link :to="item.source.href">{{ item.source.name }}</router-link>
-            </template>
+    <v-data-table :headers="headers" :items="historical" :search="search" class="elevation-1">
+      <template v-slot:item.source.name="{ item }">
+        <router-link :to="item.source.href">{{ item.source.name }}</router-link>
+      </template>
+      <template v-slot:item.destination.name="{ item }">
+        <router-link :to="item.destination.href">{{ item.destination.name }}</router-link>
+      </template>
+    </v-data-table>
 
-            <template v-slot:item.destination.name="{ item }">
-              <router-link :to="item.destination.href">{{ item.destination.name }}</router-link>
-            </template>
-
-          </v-data-table>
-        </v-flex>
-      </v-container>
-
-    </v-layout>
-  </v-container>
+  </v-card>
 </template>
 
 <script>
@@ -42,6 +31,7 @@ export default {
       {text: 'Date', align: 'left', value: 'occurred_at'},
     ],
     historical: [],
+    search: '',
   }),
   props: [],
   created() {
