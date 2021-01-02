@@ -36,7 +36,9 @@ jobs:
       - persist_to_workspace: *workspace-persist
       - save-cache:
           paths:
-            - /go/
+            - /go/roadie/node_modules
+            - /go/pkg
+            - /go/bin
           key: v1-deps-{{ checksum "go.sum" }}
 
   fe-compile:
