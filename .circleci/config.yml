@@ -185,6 +185,17 @@ workflows:
           cache_from: '$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest'
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
           use-remote-docker: true
+          tag: ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUMBER}
+          requires:
+            - build
+          filters:
+            tags:
+              ignore: /.*/
+
+      - docker/publish:
+          cache_from: '$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest'
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          use-remote-docker: true
           tag: latest,$CIRCLE_TAG
           requires:
             - build
