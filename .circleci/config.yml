@@ -40,6 +40,7 @@ jobs:
   fe:
     executor:
       name: node/default
+    working_directory: *working-dir
     steps:
       - attach_workspace:
           at: /go/
