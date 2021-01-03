@@ -14,7 +14,10 @@ aliases:
       - pkg
       - src
 
-version: 2
+orbs:
+  docker: circleci/docker@1.5.0
+
+version: 2.1
 jobs:
   build:
     environment: *default-env
@@ -150,20 +153,6 @@ jobs:
           destination: binaries
       - persist_to_workspace: *workspace-persist
 
-  docker-image:
-    environment: *default-env
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: image build
-          command: |
-            docker build --rm=false -t cloudcloud/${PROJECT}:${CIRCLE_TAG} .
-            echo ${DOCKERHUB_PASSWORD} | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
-            docker push cloudcloud/${PROJECT}:${CIRCLE_TAG}
-
 workflows:
   version: 2
 
@@ -204,7 +193,11 @@ workflows:
             tags:
               only: /^v.*/
 
-      - docker-image:
+      - docker/publish:
+          cache_from: '$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest'
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          use-remote-docker: true
+          tag: latest,$CIRCLE_TAG
           requires:
             - build
           filters:

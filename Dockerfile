@@ -1,14 +1,8 @@
 FROM node:slim AS fe
-WORKDIR "/app"
+WORKDIR /app
 
-COPY yarn.lock yarn.lock
-COPY package.json package.json
-COPY babel.config.js babel.config.js
-RUN yarn --frozen-lockfile --silent --non-interactive --link-duplicates
-
-COPY public public
-COPY src src
-RUN yarn build
+COPY . .
+RUN yarn && yarn build
 
 FROM golang:alpine AS be
 
