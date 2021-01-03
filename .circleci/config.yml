@@ -26,8 +26,6 @@ jobs:
       - image: golang:1.15-buster
     steps:
       - checkout
-      - restore-cache:
-          key: v2-deps-{{ checksum "go.sum" }}
       - run:
           name: Prep Local
           command: |
@@ -37,29 +35,19 @@ jobs:
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /go/bin/cc-test-reporter
             chmod +x /go/bin/cc-test-reporter
       - persist_to_workspace: *workspace-persist
-      - save-cache:
-          paths:
-            - /go/roadie/node_modules
-            - /go/pkg
-            - /go/bin
-          key: v2-deps-{{ checksum "go.sum" }}
 
-  fe-compile:
+  fe:
     environment: *default-env
     working_directory: *working-dir
     docker:
-      - image: vuejs/ci
+      - image: node:slim
     steps:
       - attach_workspace:
           at: /go/
-      - checkout
       - run:
-          name: Compile the Frontend
+          name: Build the frontend
           command: |
             yarn && yarn build
-      - store_artifacts:
-          path: dist
-          destination: frontend
       - persist_to_workspace: *workspace-persist
 
   be-compile:
@@ -163,7 +151,7 @@ workflows:
             tags:
               only: /.*/
 
-      - fe-compile:
+      - fe:
           requires:
             - build
           filters:
@@ -172,7 +160,7 @@ workflows:
 
       - be-compile:
           requires:
-            - fe-compile
+            - fe
           filters:
             tags:
               only: /.*/
@@ -196,7 +184,20 @@ workflows:
       - docker/publish:
           cache_from: '$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest'
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-          use-remote-docker: true
+          docker-username: DOCKERHUB_USERNAME
+          docker-password: DOCKERHUB_PASSWORD
+          tag: pr${CIRCLE_PR_NUMBER}-${CIRCLE_BUILD_NUM}
+          requires:
+            - build
+          filters:
+            tags:
+              ignore: /.*/
+
+      - docker/publish:
+          cache_from: '$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest'
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          docker-username: DOCKERHUB_USERNAME
+          docker-password: DOCKERHUB_PASSWORD
           tag: latest,$CIRCLE_TAG
           requires:
             - build
