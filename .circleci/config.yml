@@ -38,6 +38,8 @@ jobs:
       - persist_to_workspace: *workspace-persist
 
   fe:
+    executor:
+      name: node/default
     steps:
       - attach_workspace:
           at: /go/
