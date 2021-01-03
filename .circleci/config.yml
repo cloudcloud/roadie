@@ -16,7 +16,6 @@ aliases:
 
 orbs:
   docker: circleci/docker@1.5.0
-  node: circleci/node@4.1.0
 
 version: 2.1
 jobs:
@@ -38,15 +37,18 @@ jobs:
       - persist_to_workspace: *workspace-persist
 
   fe:
-    executor:
-      name: node/default
+    environment: *default-env
     working_directory: *working-dir
+    docker:
+      - image: node:slim
     steps:
       - attach_workspace:
           at: /go/
-      - node/install-packages:
-          pkg-manager: yarn
-      - persist_to_workspace: *workspace-persist
+      - run:
+          name: Build the frontend
+          command: |
+            yarn && yarn build
+      - presist_to_workspace: *workspace-persist
 
   be-compile:
     environment: *default-env
