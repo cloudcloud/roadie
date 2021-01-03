@@ -184,6 +184,8 @@ workflows:
       - docker/publish:
           cache_from: '$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest'
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          docker-username: DOCKERHUB_USERNAME
+          docker-password: DOCKERHUB_PASSWORD
           tag: ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUMBER}
           requires:
             - build
@@ -194,7 +196,8 @@ workflows:
       - docker/publish:
           cache_from: '$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest'
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-          use-remote-docker: true
+          docker-username: DOCKERHUB_USERNAME
+          docker-password: DOCKERHUB_PASSWORD
           tag: latest,$CIRCLE_TAG
           requires:
             - build
