@@ -186,7 +186,7 @@ workflows:
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
           docker-username: DOCKERHUB_USERNAME
           docker-password: DOCKERHUB_PASSWORD
-          tag: ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUMBER}
+          tag: pr${CIRCLE_PR_NUMBER}-${CIRCLE_BUILD_NUM}
           requires:
             - build
           filters:
