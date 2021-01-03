@@ -158,7 +158,7 @@ workflows:
 
       - be-compile:
           requires:
-            - fe-compile
+            - fe
           filters:
             tags:
               only: /.*/
