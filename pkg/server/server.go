@@ -73,6 +73,15 @@ func New(c types.Configer) Server {
 		},
 	)
 
+	g.StaticFS("/fonts",
+		&assetfs.AssetFS{
+			Asset:     Asset,
+			AssetDir:  AssetDir,
+			AssetInfo: AssetInfo,
+			Prefix:    "fonts/",
+		},
+	)
+
 	g.GET("/", index)
 	g.GET("/sources", index)
 	g.GET("/destinations", index)
