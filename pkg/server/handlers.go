@@ -98,6 +98,18 @@ func sources(c *gin.Context) {
 	})
 }
 
+func subSource(c *gin.Context) {
+	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
+		n := sour.FromURL(ctx.Param("name"))
+		s := sour.FromURL(ctx.Param("sub"))
+
+		return gin.H{
+			"source":  sour.PrepareSource(d.GetSource(n)),
+			"entries": d.GetSubSourceRefs(n, s),
+		}, []string{}
+	})
+}
+
 func wrap(c *gin.Context, f func(*gin.Context, *data.Data) (interface{}, []string)) {
 	begin := time.Now()
 	d := c.MustGet("data").(*data.Data)

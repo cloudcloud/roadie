@@ -90,6 +90,7 @@ func New(c types.Configer) Server {
 	api := g.Group("/api/v1")
 	api.GET("/sources", sources)
 	api.GET("/sources/:name", source)
+	api.GET("/sources/:name/:sub", subSource)
 	api.GET("/destinations", destinations)
 	api.GET("/destinations/:name", destination)
 	api.POST("/execute", execute)

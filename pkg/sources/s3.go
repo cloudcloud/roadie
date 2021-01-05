@@ -3,6 +3,7 @@ package sources
 import (
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -51,7 +52,13 @@ func (s *S3) copyToPath(refs []types.Reference, p string) {
 	for _, x := range refs {
 		filename := strings.TrimPrefix(x.Entry, s.Path)
 
-		f, err := os.Create(p + string(os.PathSeparator) + filename)
+		s.c.GetLogger().With("local_filename", p+string(os.PathSeparator)+filename).Info("Ok")
+		err := os.MkdirAll(filepath.Dir(filepath.Clean(p+string(os.PathSeparator)+filename)), 0755)
+		if err != nil {
+			s.c.GetLogger().With("error_message", err).Error("Couldn't prepare directory")
+		}
+
+		f, err := os.Create(p + filename)
 		if err != nil {
 			s.c.GetLogger().With("error_message", err).Error("Unable to setup local file.")
 			continue
@@ -111,6 +118,30 @@ func (s *S3) GetRefs() (r []types.Reference) {
 	res, err := s.s3.ListObjectsV2(in)
 	if err != nil {
 		log.Printf("Had an error [%s]\n", err)
+	}
+
+	for _, x := range res.CommonPrefixes {
+		r = append(r, types.Reference{Entry: strings.TrimRight(strings.TrimLeft(*x.Prefix, prefix), delim)})
+	}
+
+	return
+}
+
+// GetSubRefs will
+func (s *S3) GetSubRefs(sub string) (r []types.Reference) {
+	delim := "/"
+	prefix := s.Path + "/" + sub + "/"
+
+	in := &s3.ListObjectsV2Input{
+		Bucket:    aws.String(s.Bucket),
+		Delimiter: aws.String(delim),
+		MaxKeys:   aws.Int64(1000),
+		Prefix:    aws.String(prefix),
+	}
+
+	res, err := s.s3.ListObjectsV2(in)
+	if err != nil {
+		s.c.GetLogger().With("error_message", err).Error("Could not GetSubRefs.")
 	}
 
 	for _, x := range res.CommonPrefixes {

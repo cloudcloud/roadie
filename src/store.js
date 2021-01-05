@@ -17,6 +17,7 @@ export default new Vuex.Store({
       destination: {},
     },
     destination: [],
+    subSource: {},
   },
   mutations: {
     resetHistorical(state, historical) {
@@ -41,6 +42,9 @@ export default new Vuex.Store({
         destination: destination,
       };
     },
+    resetSubSource(state, source) {
+      state.subSource = source;
+    },
   },
   getters: {
     allHistorical: state => {
@@ -57,6 +61,9 @@ export default new Vuex.Store({
     },
     allDestination: state => {
       return state.destination;
+    },
+    allSubSource: state => {
+      return state.subSource;
     },
     getCopyState: state => {
       return state.copy;
@@ -103,6 +110,15 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         apiClient.getSource(source_name).then((data) => {
           commit('resetSource', data.items);
+          resolve();
+        });
+      });
+    },
+
+    getSubSource({commit}, {source_name, sub_name}) {
+      return new Promise((resolve) => {
+        apiClient.getSubSource(source_name, sub_name).then((data) => {
+          commit('resetSubSource', data.items);
           resolve();
         });
       });

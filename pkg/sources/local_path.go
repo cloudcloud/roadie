@@ -66,6 +66,11 @@ func (l *LocalPath) GetRefs() (r []types.Reference) {
 	return
 }
 
+// GetSubRefs...
+func (l *LocalPath) GetSubRefs(sub string) (r []types.Reference) {
+	return
+}
+
 // Type provides the name string for the LocalPath source type.
 func (l *LocalPath) Type() string {
 	return "local_path"
