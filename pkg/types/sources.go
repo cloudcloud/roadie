@@ -4,5 +4,6 @@ package types
 type Sourcer interface {
 	CopyTo(Reference, Destination) ([]Reference, error)
 	GetRefs() []Reference
+	GetSubRefs(string) []Reference
 	Type() string
 }

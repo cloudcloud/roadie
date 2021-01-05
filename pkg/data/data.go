@@ -134,6 +134,11 @@ func (d *Data) GetSourceRefs(s string) []types.Reference {
 	return d.GetSource(s).Store.GetRefs()
 }
 
+// GetSubSourceRefs will retrieve the sub-details for a specific source.
+func (d *Data) GetSubSourceRefs(s, u string) []types.Reference {
+	return d.GetSource(s).Store.GetSubRefs(u)
+}
+
 // GetSources will provide a list of available sources.
 func (d *Data) GetSources() []types.Source {
 	return d.Content.Sources

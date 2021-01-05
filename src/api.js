@@ -28,6 +28,10 @@ const apiClient = {
     return this.perform('get', '/api/v1/sources');
   },
 
+  getSubSource(source_name, sub_name) {
+    return this.perform('get', `api/v1/sources/${source_name}/${sub_name}`);
+  },
+
   pushCopy(payload) {
     return this.perform('post', '/api/v1/execute', payload);
   },
