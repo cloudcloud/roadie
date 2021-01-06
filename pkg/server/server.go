@@ -35,7 +35,7 @@ func New(c types.Configer) Server {
 	g := gin.New()
 	g.Use(
 		cors.New(cors.Config{
-			AllowOrigins: []string{"http://localhost:8008", "http://localhost:8080"},
+			AllowOrigins: d.Content.Domains,
 			AllowMethods: []string{"GET", "POST", "PUT", "OPTIONS", "HEAD", "DELETE"},
 			AllowHeaders: []string{"Origin", "X-Client", "Content-Type"},
 		}),
