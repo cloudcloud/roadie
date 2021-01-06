@@ -60,16 +60,14 @@ func (c *Config) GetListener() string {
 
 // GetLogger will provide the pre-prepared logger for use through roadie.
 func (c *Config) GetLogger() *zap.SugaredLogger {
-	z, err := zap.NewProduction(
+	// Under what conditions would this fail?
+	z, _ := zap.NewProduction(
 		zap.AddCaller(),
 		zap.Fields(
 			zap.String("app", "roadie"),
 			zap.Time("time", time.Now()),
 		),
 	)
-	if err != nil {
-		return nil
-	}
 	sugar := z.Sugar()
 
 	return sugar
