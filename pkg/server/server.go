@@ -29,18 +29,6 @@ type Serve struct {
 	g *gin.Engine
 }
 
-// request defines a specific request parameters for observability.
-type request struct {
-	BodySize   int           `json:"body_size"`
-	ClientIP   string        `json:"client_ip"`
-	End        time.Time     `json:"end"`
-	Latency    time.Duration `json:"latency"`
-	Method     string        `json:"method"`
-	Path       string        `json:"path"`
-	Start      time.Time     `json:"start"`
-	StatusCode int           `json:"status_code"`
-}
-
 // New will generate a new Server instance that will setup a HTTP
 // server ready to begin handling requests.
 func New(c types.Configer) Server {
