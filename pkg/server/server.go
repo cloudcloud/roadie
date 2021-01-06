@@ -32,6 +32,8 @@ type Serve struct {
 // New will generate a new Server instance that will setup a HTTP
 // server ready to begin handling requests.
 func New(c types.Configer) Server {
+	d := data.New(c)
+
 	g := gin.New()
 	g.Use(
 		cors.New(cors.Config{
@@ -40,35 +42,12 @@ func New(c types.Configer) Server {
 			AllowHeaders: []string{"Origin", "X-Client", "Content-Type"},
 		}),
 		logger(c),
-		push(c),
+		push(c, d),
 	)
 
-	g.StaticFS("/js",
-		&assetfs.AssetFS{
-			Asset:     Asset,
-			AssetDir:  AssetDir,
-			AssetInfo: AssetInfo,
-			Prefix:    "js/",
-		},
-	)
-
-	g.StaticFS("/css",
-		&assetfs.AssetFS{
-			Asset:     Asset,
-			AssetDir:  AssetDir,
-			AssetInfo: AssetInfo,
-			Prefix:    "css/",
-		},
-	)
-
-	g.StaticFS("/fonts",
-		&assetfs.AssetFS{
-			Asset:     Asset,
-			AssetDir:  AssetDir,
-			AssetInfo: AssetInfo,
-			Prefix:    "fonts/",
-		},
-	)
+	addFS(g, "/js", "js/")
+	addFS(g, "/css", "css/")
+	addFS(g, "/fonts", "fonts/")
 
 	g.GET("/", index)
 	g.GET("/sources", index)
@@ -91,14 +70,23 @@ func New(c types.Configer) Server {
 	}
 }
 
+func addFS(g *gin.Engine, pre, post string) {
+	g.StaticFS(pre,
+		&assetfs.AssetFS{
+			Asset:     Asset,
+			AssetDir:  AssetDir,
+			AssetInfo: AssetInfo,
+			Prefix:    post,
+		},
+	)
+}
+
 // Start will begin the HTTP request handling process.
 func (s *Serve) Start() error {
 	return s.g.Run(s.c.GetListener())
 }
 
-func push(c types.Configer) gin.HandlerFunc {
-	d := data.New(c)
-
+func push(c types.Configer, d *data.Data) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		ctx.Set("data", d)
 		ctx.Set("config", c)
