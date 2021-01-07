@@ -1,0 +1,20 @@
+{
+  "destinations": [
+    {
+      "config": {
+        "location": "/dest"
+      },
+      "name": "dest",
+      "type": "local_path"
+    }
+  ],
+  "sources": [
+    {
+      "config": {
+        "location": "/sour"
+      },
+      "name": "sour",
+      "type": "local_path"
+    }
+  ]
+}

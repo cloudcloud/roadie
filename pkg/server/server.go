@@ -29,58 +29,25 @@ type Serve struct {
 	g *gin.Engine
 }
 
-// request defines a specific request parameters for observability.
-type request struct {
-	BodySize   int           `json:"body_size"`
-	ClientIP   string        `json:"client_ip"`
-	End        time.Time     `json:"end"`
-	Latency    time.Duration `json:"latency"`
-	Method     string        `json:"method"`
-	Path       string        `json:"path"`
-	Start      time.Time     `json:"start"`
-	StatusCode int           `json:"status_code"`
-}
-
 // New will generate a new Server instance that will setup a HTTP
 // server ready to begin handling requests.
 func New(c types.Configer) Server {
+	d := data.New(c)
+
 	g := gin.New()
 	g.Use(
 		cors.New(cors.Config{
-			AllowOrigins: []string{"http://localhost:8008", "http://localhost:8080"},
+			AllowOrigins: d.Content.Domains,
 			AllowMethods: []string{"GET", "POST", "PUT", "OPTIONS", "HEAD", "DELETE"},
 			AllowHeaders: []string{"Origin", "X-Client", "Content-Type"},
 		}),
 		logger(c),
-		push(c),
+		push(c, d),
 	)
 
-	g.StaticFS("/js",
-		&assetfs.AssetFS{
-			Asset:     Asset,
-			AssetDir:  AssetDir,
-			AssetInfo: AssetInfo,
-			Prefix:    "js/",
-		},
-	)
-
-	g.StaticFS("/css",
-		&assetfs.AssetFS{
-			Asset:     Asset,
-			AssetDir:  AssetDir,
-			AssetInfo: AssetInfo,
-			Prefix:    "css/",
-		},
-	)
-
-	g.StaticFS("/fonts",
-		&assetfs.AssetFS{
-			Asset:     Asset,
-			AssetDir:  AssetDir,
-			AssetInfo: AssetInfo,
-			Prefix:    "fonts/",
-		},
-	)
+	addFS(g, "/js", "js/")
+	addFS(g, "/css", "css/")
+	addFS(g, "/fonts", "fonts/")
 
 	g.GET("/", index)
 	g.GET("/sources", index)
@@ -103,14 +70,23 @@ func New(c types.Configer) Server {
 	}
 }
 
+func addFS(g *gin.Engine, pre, post string) {
+	g.StaticFS(pre,
+		&assetfs.AssetFS{
+			Asset:     Asset,
+			AssetDir:  AssetDir,
+			AssetInfo: AssetInfo,
+			Prefix:    post,
+		},
+	)
+}
+
 // Start will begin the HTTP request handling process.
 func (s *Serve) Start() error {
 	return s.g.Run(s.c.GetListener())
 }
 
-func push(c types.Configer) gin.HandlerFunc {
-	d := data.New(c)
-
+func push(c types.Configer, d *data.Data) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		ctx.Set("data", d)
 		ctx.Set("config", c)
