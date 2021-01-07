@@ -29,8 +29,10 @@ func FromURL(u string) string {
 // PrepareList is a semi-decorator that will add details to a list of
 // destinations that is primarily useful for external contexts.
 func PrepareList(d []types.Destination) (o []types.Destination) {
-	for _, x := range d {
-		o = append(o, PrepareDestination(x))
+	o = make([]types.Destination, len(d))
+
+	for a, x := range d {
+		o[a] = PrepareDestination(x)
 	}
 
 	return
