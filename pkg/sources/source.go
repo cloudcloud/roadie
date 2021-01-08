@@ -32,8 +32,10 @@ func FromURL(n string) string {
 // PrepareList will decorate a list of sources with additional details
 // that are mostly useful externally.
 func PrepareList(s []types.Source) (o []types.Source) {
-	for _, x := range s {
-		o = append(o, PrepareSource(x))
+	o = make([]types.Source, len(s))
+
+	for a, x := range s {
+		o[a] = PrepareSource(x)
 	}
 
 	return

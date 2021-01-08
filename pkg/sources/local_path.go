@@ -24,6 +24,8 @@ func NewLocalPath(c types.Configer) *LocalPath {
 // CopyTo will accept a Reference and Destination to copy the
 // refered file to the provided destination.
 func (l *LocalPath) CopyTo(r types.Reference, d types.Destination) (list []types.Reference, err error) {
+	list = make([]types.Reference, 0)
+
 	switch d.Type {
 	case "local_path":
 		err = l.copyToPath(r, d.Store.GetLocation())
@@ -54,6 +56,8 @@ func (l *LocalPath) copyToPath(r types.Reference, d string) error {
 
 // GetRefs will retrieve a list of all files within the source location.
 func (l *LocalPath) GetRefs() (r []types.Reference) {
+	r = make([]types.Reference, 0)
+
 	m, err := filepath.Glob(l.Location + string(filepath.Separator) + "*")
 	if err == nil {
 		for _, x := range m {
