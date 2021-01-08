@@ -41,7 +41,7 @@ func (l *LocalPath) GetRefs() (r []types.Reference) {
 func (l *LocalPath) RemoveFile(r string) (err error) {
 	l.c.GetLogger().With("reference", r).Info("Removing the file.")
 
-	err = os.Remove(r)
+	err = os.RemoveAll(r)
 	return
 }
 
