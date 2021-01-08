@@ -39,6 +39,8 @@ func NewS3(c types.Configer) *S3 {
 // CopyTo will carry out the copy operation from the current bucket
 // configuration into the provided destination.
 func (s *S3) CopyTo(r types.Reference, d types.Destination) (list []types.Reference, err error) {
+	list = make([]types.Reference, 0)
+
 	refs := s.GetMatchingRefs(r)
 	switch d.Type {
 	case "local_path":
@@ -79,6 +81,7 @@ func (s *S3) copyToPath(refs []types.Reference, p string) {
 // GetMatchingRefs will pull a list of references from the bucket by using
 // the prefix capability of the S3 API for a specific file path.
 func (s *S3) GetMatchingRefs(r types.Reference) (refs []types.Reference) {
+	refs = make([]types.Reference, 0)
 	prefix := s.Path + "/" + r.Entry
 
 	in := &s3.ListObjectsV2Input{
@@ -102,6 +105,7 @@ func (s *S3) GetMatchingRefs(r types.Reference) (refs []types.Reference) {
 // GetRefs will pull a full list of references for the bucket, taking into
 // account the nature of folder-structures with the depth.
 func (s *S3) GetRefs() (r []types.Reference) {
+	r = make([]types.Reference, 0)
 	delim := "."
 	prefix := s.Path + "/"
 	if s.Depth > 0 {
@@ -129,6 +133,7 @@ func (s *S3) GetRefs() (r []types.Reference) {
 
 // GetSubRefs will
 func (s *S3) GetSubRefs(sub string) (r []types.Reference) {
+	r = make([]types.Reference, 0)
 	delim := "/"
 	prefix := s.Path + "/" + sub + "/"
 

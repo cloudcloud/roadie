@@ -27,6 +27,7 @@ func (l *LocalPath) GetLocation() string {
 // GetRefs will trawl the filesystem location for the destination and
 // generate a list of all files located within it.
 func (l *LocalPath) GetRefs() (r []types.Reference) {
+	r = make([]types.Reference, 0)
 	m, err := filepath.Glob(l.Location + string(filepath.Separator) + "*")
 	if err == nil {
 		for _, x := range m {
