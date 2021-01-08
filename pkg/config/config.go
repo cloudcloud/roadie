@@ -20,7 +20,7 @@ type Config struct {
 
 // New will generate a Config instance, pulling from expected locations
 // to determine appropriate values for configuration entries.
-func New() (types.Configer, error) {
+func New() types.Configer {
 	l, err := strconv.Atoi(os.Getenv("PORT"))
 	if l < 1 || err != nil {
 		l = 8008
@@ -40,7 +40,7 @@ func New() (types.Configer, error) {
 		Hostname: h,
 		Listener: fmt.Sprintf(":%d", l),
 		Location: conf,
-	}, nil
+	}
 }
 
 // GetConfigFile will provide the path to load the config data from.

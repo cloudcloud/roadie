@@ -8,13 +8,5 @@ import (
 )
 
 func main() {
-	c, err := config.New()
-	if err != nil {
-		panic(err)
-	}
-
-	s := server.New(c)
-	if err := s.Start(); err != nil {
-		panic(err)
-	}
+	server.New(config.New()).Start()
 }
