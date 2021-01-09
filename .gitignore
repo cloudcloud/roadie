@@ -22,3 +22,5 @@ pkg/server/assets.go
 # Data
 config.roadie.json
 .envrc
+pkg/data/test_data/
+pkg/destinations/test_data/
