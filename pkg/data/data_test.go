@@ -70,3 +70,29 @@ func TestGetSources(t *testing.T) {
 	d.Content.Sources = append(d.Content.Sources, types.Source{})
 	assert.Len(d.GetSources(), 1, "Adding a single Source will appear with GetSources()")
 }
+
+func TestAddHistory(t *testing.T) {
+	assert := assert.New(t)
+
+	sour := types.Source{}
+	dest := types.Destination{}
+	patt := "test"
+	state := StateSuccess
+
+	l := "test_data/tmp.file"
+	c := &config.Config{Location: l}
+	d := &Data{c: c, l: l}
+
+	err := d.AddHistory(sour, dest, patt, state)
+	assert.Nil(err)
+
+	freshData := New(c)
+	assert.Len(freshData.GetHistories(), 1, "A single History should've been added.")
+
+	err = d.AddHistory(sour, dest, patt, state)
+	assert.Nil(err)
+
+	freshData = New(c)
+	assert.Len(freshData.GetHistories(), 2, "Adding another History makes the length 2.")
+	os.RemoveAll(l)
+}

@@ -16,5 +16,8 @@
       "name": "sour",
       "type": "local_path"
     }
+  ],
+  "domains": [
+    "http://localhost:9999"
   ]
 }
