@@ -125,7 +125,7 @@ func (s *S3) GetRefs() (r []types.Reference) {
 	}
 
 	for _, x := range res.CommonPrefixes {
-		r = append(r, types.Reference{Entry: strings.TrimRight(strings.TrimLeft(*x.Prefix, prefix), delim)})
+		r = append(r, types.Reference{Entry: strings.TrimSuffix(strings.TrimPrefix(*x.Prefix, prefix), delim)})
 	}
 
 	return
@@ -135,7 +135,7 @@ func (s *S3) GetRefs() (r []types.Reference) {
 func (s *S3) GetSubRefs(sub string) (r []types.Reference) {
 	r = make([]types.Reference, 0)
 	delim := "/"
-	prefix := s.Path + "/" + sub + "/"
+	prefix := s.Path + delim + sub + delim
 
 	in := &s3.ListObjectsV2Input{
 		Bucket:    aws.String(s.Bucket),
@@ -150,7 +150,7 @@ func (s *S3) GetSubRefs(sub string) (r []types.Reference) {
 	}
 
 	for _, x := range res.CommonPrefixes {
-		r = append(r, types.Reference{Entry: strings.TrimRight(strings.TrimLeft(*x.Prefix, prefix), delim)})
+		r = append(r, types.Reference{Entry: strings.TrimSuffix(strings.TrimPrefix(*x.Prefix, prefix), delim)})
 	}
 
 	return
