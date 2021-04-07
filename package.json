@@ -9,25 +9,27 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "sass": "^1.29.0",
-    "sass-loader": "^10.0.0",
+    "elliptic": "6.5.4",
+    "sass": "1.32.8",
+    "sass-loader": "10.1.1",
     "vue": "^2.6.12",
-    "vue-router": "^3.4.9",
-    "vuetify": "^2.3.19",
+    "vue-router": "3.5.1",
+    "vuetify": "2.4.9",
     "vuex": "^3.6.0",
-    "webpack": "^4.46.0"
+    "webpack": "^4.46.0",
+    "y18n": "4.0.2"
   },
   "devDependencies": {
     "@mdi/font": "^5.8.55",
     "@mdi/js": "^5.8.55",
-    "@vue/cli-plugin-babel": "^4.4.6",
-    "@vue/cli-plugin-eslint": "^4.4.6",
-    "@vue/cli-service": "^4.4.6",
+    "@vue/cli-plugin-babel": "4.5.12",
+    "@vue/cli-plugin-eslint": "4.5.12",
+    "@vue/cli-service": "4.5.12",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.8.0",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue": "7.8.0",
     "stylus": "^0.54.8",
-    "stylus-loader": "^3.0.1",
+    "stylus-loader": "4.3.3",
     "vue-cli-plugin-vuetify": "^2.0.7",
     "vue-template-compiler": "^2.5.17",
     "vuetify-loader": "^1.6.0"
@@ -41,7 +43,14 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "vue/valid-v-slot": [
+        "error",
+        {
+          "allowModifiers": true
+        }
+      ]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
