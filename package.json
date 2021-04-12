@@ -16,7 +16,7 @@
     "vue-router": "3.5.1",
     "vuetify": "2.4.9",
     "vuex": "^3.6.0",
-    "webpack": "^4.46.0",
+    "webpack": "^5.31.2",
     "y18n": "5.0.8"
   },
   "devDependencies": {
