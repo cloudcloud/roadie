@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go v1.38.21
 	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/gin-contrib/cors v1.3.1
-	github.com/gin-gonic/gin v1.7.1
+	github.com/gin-gonic/gin v1.7.2
 	github.com/stretchr/testify v1.7.0
 	go.uber.org/zap v1.16.0
 )
