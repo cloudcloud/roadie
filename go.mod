@@ -9,5 +9,5 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.1
 	github.com/stretchr/testify v1.7.0
-	go.uber.org/zap v1.16.0
+	go.uber.org/zap v1.18.1
 )
