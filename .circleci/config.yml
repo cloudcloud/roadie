@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Build the frontend
           command: |
-            yarn && yarn build
+            yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
       - persist_to_workspace: *workspace-persist
 
   be-compile:
