@@ -24,7 +24,7 @@ binary: ; $(info $(C) building binary $(PROJECT).$(GOARCH)-$(GOOS))
 	fi
 
 build-fe: ; $(info $(C) building the frontend assets)
-	$V yarn && yarn build
+	$V yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
 
 clean: ; $(info $(C) cleaning assets and dist)
 	$V rm pkg/server/assets.go
@@ -41,7 +41,7 @@ dev-be: bin-prep bin-dist install ; $(info $(C) building back-end for dev)
 
 # dev-fe is a watch task with built-in node server
 dev-fe: ; $(info $(C) building front-end for dev)
-	$V yarn serve
+	$V NODE_OPTIONS=--openssl-legacy-provider yarn serve
 
 docker:
 	$V docker build -t cloudcloud/roadie:latest .
