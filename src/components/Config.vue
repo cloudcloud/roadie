@@ -1,62 +1,87 @@
 <template>
-  <v-container fluid grid-list-sm>
-    <v-layout row wrap>
+  <v-container>
+    <v-row>
 
-      <v-toolbar flat color="white">
-        <v-toolbar-title>roadie</v-toolbar-title>
-        <v-divider class="mx-2" inset vertical></v-divider>
-        <span>config</span>
-        <v-spacer />
-      </v-toolbar>
-    </v-layout>
+      <v-col cols="6">
+        <v-card shaped>
+          <v-card-title>
+            <span>disk</span>
+          </v-card-title>
+          <v-card-subtitle>Space related details.</v-card-subtitle>
+          <v-card-text>
+            <div v-for="item in destinations" v-bind:key="item.name">
+              <router-link :to="item.href">{{ item.config.location }}</router-link>
+              -
+              <strong>X GB</strong> free of <strong>Y GB</strong>.
+            </div>
+          </v-card-text>
 
-    <v-layout row wrap>
-      <!--v-container mt-0 pt-0 xs12>
-        <v-flex mb-3>
-          <v-data-table :headers="headers" :items="sources" class="elevation-1">
-            <template slot="items" slot-scope="props">
-              <td><router-link :to="props.item.href" :href="props.item.href">{{ props.item.name }}</router-link></td>
-              <td>{{ props.item.location }}</td>
-              <td>{{ props.item.type }}</td>
+          <v-divider class="mx-4"></v-divider>
 
-            </template>
-          </v-data-table>
-        </v-flex>
-      </v-container-->
+          <v-card-text>
+            <div v-for="item in sources" v-bind:key="item.name">
+              <router-link :to="item.href" v-if="item.type == 's3'">s3://{{ item.config.bucket }}/{{ item.config.path }}</router-link>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-col>
 
-    </v-layout>
+      <v-col cols="6">
+        <v-card shaped>
+          <v-card-title>
+            <span>destinations</span>
+          </v-card-title>
+          <v-card-subtitle>Manage any Destination.</v-card-subtitle>
+        </v-card>
+      </v-col>
+
+      <v-col cols="6">
+        <v-card shaped>
+          <v-card-title>
+            <span>sources</span>
+          </v-card-title>
+          <v-card-subtitle>Manage any Source.</v-card-subtitle>
+        </v-card>
+      </v-col>
+
+    </v-row>
   </v-container>
 </template>
 
 <script>
-//import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { mapActions, mapMutations, mapGetters } from 'vuex';
 
-//export default {
-  //data: () => ({
-    //headers: [
-      //{text: 'Name', align: 'left', value: 'name'},
-      //{text: 'Location', align: 'left', value: 'location'},
-      //{text: 'Type', align: 'left', value: 'type'},
-    //],
-    //sources: [],
-  //}),
-  //props: [],
-  //created() {
-    //this.$store.dispatch('getSources').then(() => {
-      //this.loadSources();
-    //})
-  //},
-  //methods: {
-    //loadSources() {
-      //this.sources = this.$store.getters.allSources;
-    //},
-    //...mapMutations(['resetSources']),
-    //...mapActions(['getSources']),
-  //},
-  //computed: {
-    //...mapGetters(['allSources']),
-  //},
-//};
+export default {
+  data: () => ({
+    destinations: [],
+    sources: [],
+  }),
+  props: [],
+  created() {
+
+    this.$store.dispatch('getDestinations').then(() => {
+      this.loadDestinations();
+    });
+
+    this.$store.dispatch('getSources').then(() => {
+      this.loadSources();
+    });
+
+  },
+  methods: {
+    loadDestinations() {
+      this.destinations = this.$store.getters.allDestinations;
+    },
+    loadSources() {
+      this.sources = this.$store.getters.allSources;
+    },
+    ...mapMutations(['resetSources', 'resetDestinations']),
+    ...mapActions(['getSources', 'getDestinations']),
+  },
+  computed: {
+    ...mapGetters(['allSources', 'allDestinations']),
+  },
+};
 </script>
 
 <style></style>
