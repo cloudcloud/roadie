@@ -1,53 +1,61 @@
 <template>
-  <v-card>
+  <v-container>
+    <v-row>
 
-    <v-card-title>
-      <span>source</span> | <span>{{source_name}}</span>
-      <v-spacer />
-      <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
-    </v-card-title>
+      <v-col cols="12">
+        <v-card shaped>
 
-    <v-data-table :headers="headersExpanded" :items="source.entries" :search="search" :single-expand="singleExpand" :expanded.sync="expanded" item-key="entry" show-expand class="elevation-1" v-if="isExpandable">
-      <template v-slot:item.action="{ item }">
-        <v-btn block small @click="copy(item.entry)">Copy</v-btn>
-      </template>
-      <template v-slot:expanded-item="{ headers,item }">
-        <td :colspan="headers.length">
-          <SubSource :sub_name="item.entry" :source_name="source.source.name" />
-        </td>
-      </template>
-    </v-data-table>
+          <v-card-title>
+            <span>source</span> | <span>{{source_name}}</span>
+            <v-spacer />
+            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+          </v-card-title>
 
-    <v-data-table v-else :headers="headers" :items="source.entries" :search="search" class="elevation-1">
-      <template v-slot:item.action="{ item }">
-        <v-btn block small @click="copy(item.entry)">Copy</v-btn>
-      </template>
-    </v-data-table>
+          <v-data-table :headers="headersExpanded" :items="source.entries" :search="search" :single-expand="singleExpand" :expanded.sync="expanded" item-key="entry" show-expand class="elevation-1" v-if="isExpandable">
+            <template v-slot:item.action="{ item }">
+              <v-btn block small @click="copy(item.entry)">Copy</v-btn>
+            </template>
+            <template v-slot:expanded-item="{ headers,item }">
+              <td :colspan="headers.length">
+                <SubSource :sub_name="item.entry" :source_name="source.source.name" />
+              </td>
+            </template>
+          </v-data-table>
 
-    <v-dialog v-model="dialog" max-width="500">
-      <v-card :loading="loading" class="mx-auto">
-        <v-card-title>
-          Copy
-        </v-card-title>
+          <v-data-table v-else :headers="headers" :items="source.entries" :search="search" class="elevation-1">
+            <template v-slot:item.action="{ item }">
+              <v-btn block small @click="copy(item.entry)">Copy</v-btn>
+            </template>
+          </v-data-table>
 
-        <v-card-subtitle>
-          Copying {{ entry }}. What is the desired Destination?
-        </v-card-subtitle>
+          <v-dialog v-model="dialog" max-width="500">
+            <v-card :loading="loading" class="mx-auto">
+              <v-card-title>
+                Copy
+              </v-card-title>
 
-        <v-card-text>
-          <v-combobox dense outlined persistent-hint solo autofocus v-model="destination" item-text="name" :items="destinations"></v-combobox>
-        </v-card-text>
+              <v-card-subtitle>
+                Copying {{ entry }}. What is the desired Destination?
+              </v-card-subtitle>
 
-        <v-card-actions>
-          <v-spacer />
-          <v-btn @click="close">Cancel</v-btn>
-          <v-btn @click="save">Save</v-btn>
-        </v-card-actions>
+              <v-card-text>
+                <v-combobox dense outlined persistent-hint solo autofocus v-model="destination" item-text="name" :items="destinations"></v-combobox>
+              </v-card-text>
 
-      </v-card>
-    </v-dialog>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn @click="close">Cancel</v-btn>
+                <v-btn @click="save">Save</v-btn>
+              </v-card-actions>
 
-  </v-card>
+            </v-card>
+          </v-dialog>
+
+        </v-card>
+      </v-col>
+
+    </v-row>
+  </v-container>
 </template>
 
 <script>

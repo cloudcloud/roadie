@@ -1,40 +1,48 @@
 <template>
-  <v-card>
+  <v-container>
+    <v-row>
 
-    <v-card-title>
-      <span>destination</span> | <span>{{destination_name}}</span>
-      <v-spacer />
-      <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
-    </v-card-title>
+      <v-col cols="12">
+        <v-card shaped>
 
-    <v-data-table :headers="headers" :items="destination.entries" :search="search" class="elevation-1">
-      <template v-slot:item.action="{ item }">
-        <v-btn block small @click="remove(item.entry)">Remove</v-btn>
-      </template>
-    </v-data-table>
-
-    <v-dialog v-model="dialog" max-width="500">
-      <v-card :loading="loading" class="mx-auto">
-        <v-card-title>
-          Remove
-        </v-card-title>
-
-        <v-card-subtitle>
-          Removing {{ entry }}. Are you sure?
-        </v-card-subtitle>
-
-        <v-card-actions>
-          <v-card-actions>
+          <v-card-title>
+            <span>destination</span> | <span>{{destination_name}}</span>
             <v-spacer />
-            <v-btn @click="close">No</v-btn>
-            <v-btn @click="save" class="error">Yes</v-btn>
-          </v-card-actions>
-        </v-card-actions>
+            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+          </v-card-title>
 
-      </v-card>
-    </v-dialog>
+          <v-data-table :headers="headers" :items="destination.entries" :search="search" class="elevation-1">
+            <template v-slot:item.action="{ item }">
+              <v-btn block small @click="remove(item.entry)">Remove</v-btn>
+            </template>
+          </v-data-table>
 
-  </v-card>
+          <v-dialog v-model="dialog" max-width="500">
+            <v-card :loading="loading" class="mx-auto">
+              <v-card-title>
+                Remove
+              </v-card-title>
+
+              <v-card-subtitle>
+                Removing {{ entry }}. Are you sure?
+              </v-card-subtitle>
+
+              <v-card-actions>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn @click="close">No</v-btn>
+                  <v-btn @click="save" class="error">Yes</v-btn>
+                </v-card-actions>
+              </v-card-actions>
+
+            </v-card>
+          </v-dialog>
+
+        </v-card>
+      </v-col>
+
+    </v-row>
+  </v-container>
 </template>
 
 <script>
