@@ -23,7 +23,7 @@ jobs:
     environment: *default-env
     working_directory: *working-dir
     docker:
-      - image: golang:1.15-buster
+      - image: golang:1.17-buster
     steps:
       - checkout
       - run:
@@ -54,7 +54,7 @@ jobs:
     environment: *default-env
     working_directory: *working-dir
     docker:
-      - image: golang:1.15-buster
+      - image: golang:1.17-buster
     steps:
       - attach_workspace:
           at: /go/
@@ -68,7 +68,7 @@ jobs:
     environment: *default-env
     working_directory: *working-dir
     docker:
-      - image: golang:1.15-buster
+      - image: golang:1.17-buster
     steps:
       - attach_workspace:
           at: /go/
@@ -90,7 +90,7 @@ jobs:
     environment: *default-env
     working_directory: *working-dir
     docker:
-      - image: golang:1.15-buster
+      - image: golang:1.17-buster
     steps:
       - attach_workspace:
           at: /go/
