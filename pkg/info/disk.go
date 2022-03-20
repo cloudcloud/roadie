@@ -8,6 +8,7 @@ import "syscall"
 // specific disk.
 type Disk struct {
 	Free uint64
+	Path string
 	Size uint64
 	Used uint64
 
@@ -26,6 +27,7 @@ func DiskDetails(d []string) []Disk {
 		i = append(i, Disk{
 			stat: &stat,
 			Free: stat.Bfree * uint64(stat.Bsize),
+			Path: x,
 			Size: uint64(stat.Blocks) * uint64(stat.Bsize),
 			Used: (uint64(stat.Blocks) * uint64(stat.Bsize)) - (stat.Bfree * uint64(stat.Bsize)),
 		})

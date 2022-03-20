@@ -21,13 +21,7 @@ func config(c *gin.Context) {
 
 		for _, p := range d.GetDestinations() {
 			if p.Type == dest.DestinationLocalPath {
-				paths = append(paths, dest.PrepareDestination(p).GetLocation())
-			}
-		}
-
-		for _, p := range d.GetSources() {
-			if p.Type == sour.SourceLocalPath {
-				paths = append(paths, sour.PrepareSource(p).GetLocation())
+				paths = append(paths, p.Store.GetLocation())
 			}
 		}
 
