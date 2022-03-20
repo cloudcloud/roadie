@@ -20,18 +20,18 @@ func config(c *gin.Context) {
 		paths := []string{}
 
 		for _, p := range d.GetDestinations() {
-			if p.Type() == dest.DestinationLocalPath {
-				paths = append(paths, p.GetLocation())
+			if p.Type == dest.DestinationLocalPath {
+				paths = append(paths, dest.PrepareDestination(p).GetLocation())
 			}
 		}
 
 		for _, p := range d.GetSources() {
-			if p.Type() == sour.SourceLocalPath {
-				paths = append(paths, p.GetLocation())
+			if p.Type == sour.SourceLocalPath {
+				paths = append(paths, sour.PrepareSource(p).GetLocation())
 			}
 		}
 
-		i := info.DiskDetails(d.Content)
+		i := info.DiskDetails(paths)
 
 		return gin.H{
 			"disk_info": i,
