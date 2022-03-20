@@ -9,6 +9,10 @@ import (
 	"github.com/cloudcloud/roadie/pkg/types"
 )
 
+const (
+	SourceLocalPath = "local_path"
+)
+
 // LocalPath is the source implementation of working with the local filesystem.
 type LocalPath struct {
 	Location string `json:"location"`
@@ -35,6 +39,11 @@ func (l *LocalPath) CopyTo(r types.Reference, d types.Destination) (list []types
 	}
 
 	return
+}
+
+// GetLocation will return the local path for this specific source.
+func (l *LocalPath) GetLocation() string {
+	return l.Location
 }
 
 func (l *LocalPath) copyToPath(r types.Reference, d string) error {
@@ -77,5 +86,5 @@ func (l *LocalPath) GetSubRefs(sub string) (r []types.Reference) {
 
 // Type provides the name string for the LocalPath source type.
 func (l *LocalPath) Type() string {
-	return "local_path"
+	return SourceLocalPath
 }

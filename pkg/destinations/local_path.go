@@ -7,6 +7,10 @@ import (
 	"github.com/cloudcloud/roadie/pkg/types"
 )
 
+const (
+	DestinationLocalPath = "local_path"
+)
+
 // LocalPath is the implementation of a local filesystem destination.
 type LocalPath struct {
 	Location string `json:"location"`
@@ -48,5 +52,5 @@ func (l *LocalPath) RemoveFile(r string) (err error) {
 
 // Type provides the referencial name for this destination type.
 func (l *LocalPath) Type() string {
-	return "local_path"
+	return DestinationLocalPath
 }
