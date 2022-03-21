@@ -1,3 +1,4 @@
+CONFIG_FILE?=./config.roadie.json
 PROJECT?=roadie
 C = $(shell printf "\033[35;1m-->\033[0m")
 V := $(if $V,,@)
@@ -37,7 +38,7 @@ coverage: ; $(info $(C) running coverage)
 
 # at this time, there's no watch enabled for the go binary
 dev-be: bin-prep bin-dist install ; $(info $(C) building back-end for dev)
-	$V $(PROJECT)
+	$V CONFIG_FILE=$(CONFIG_FILE) $(PROJECT)
 
 # dev-fe is a watch task with built-in node server
 dev-fe: ; $(info $(C) building front-end for dev)
