@@ -7,10 +7,10 @@ import "syscall"
 // Disk is a structure to capture some space utilisation details about a
 // specific disk.
 type Disk struct {
-	Free uint64
-	Path string
-	Size uint64
-	Used uint64
+	Free uint64 `json:"free"`
+	Path string `json:"path"`
+	Size uint64 `json:"size"`
+	Used uint64 `json:"used"`
 
 	stat *syscall.Statfs_t
 }
