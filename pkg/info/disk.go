@@ -1,3 +1,5 @@
+//go:build !windows
+
 // Package info is a house for gathering further information about specific
 // components relevant to roadie.
 package info
