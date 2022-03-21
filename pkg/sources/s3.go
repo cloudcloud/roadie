@@ -13,6 +13,10 @@ import (
 	"github.com/cloudcloud/roadie/pkg/types"
 )
 
+const (
+	SourceS3 = "s3"
+)
+
 // S3 is a data object that allows working with an S3 location.
 type S3 struct {
 	Bucket  string `json:"bucket"`
@@ -158,5 +162,5 @@ func (s *S3) GetSubRefs(sub string) (r []types.Reference) {
 
 // Type provides the string reference for this type of source.
 func (s *S3) Type() string {
-	return "s3"
+	return SourceS3
 }
