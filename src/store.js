@@ -20,6 +20,9 @@ export default new Vuex.Store({
     subSource: {},
   },
   mutations: {
+    resetConfig(state, config) {
+      state.config = config;
+    },
     resetHistorical(state, historical) {
       state.historical = historical;
     },
@@ -47,6 +50,9 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    allConfig: state => {
+      return state.config;
+    },
     allHistorical: state => {
       return state.historical;
     },
@@ -70,6 +76,15 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    getConfig({commit}) {
+      return new Promise((resolve) => {
+        apiClient.getConfig().then((data) => {
+          commit('resetConfig', data.items);
+          resolve();
+        });
+      });
+    },
+
     getDestinations({commit}) {
       return new Promise((resolve) => {
         apiClient.getDestinations().then((data) => {

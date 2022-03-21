@@ -8,6 +8,10 @@ const client = axios.create({
 })
 
 const apiClient = {
+  getConfig() {
+    return this.perform('get', '/api/v1/config');
+  },
+
   getDestination(destination_name) {
     return this.perform('get', `/api/v1/destinations/${destination_name}`)
   },
