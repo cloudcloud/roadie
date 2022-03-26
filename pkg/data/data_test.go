@@ -4,7 +4,6 @@ import (
 	"os"
 	"testing"
 
-	"bou.ke/monkey"
 	"github.com/cloudcloud/roadie/pkg/config"
 	"github.com/cloudcloud/roadie/pkg/types"
 	"github.com/stretchr/testify/assert"
@@ -30,11 +29,6 @@ func TestNew(t *testing.T) {
 
 func TestNewNoConfigFile(t *testing.T) {
 	assert := assert.New(t)
-
-	monkey.Patch(os.Exit, func(i int) {
-		panic("os.Exit called")
-	})
-	defer monkey.UnpatchAll()
 
 	assert.Panics(func() {
 		New(&config.Config{Location: "bogus_file"})

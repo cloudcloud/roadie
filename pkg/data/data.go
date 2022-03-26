@@ -37,7 +37,8 @@ func New(c types.Configer) *Data {
 	// load the config file and unmarshal into d
 	content, err := ioutil.ReadFile(d.l)
 	if err != nil {
-		c.GetLogger().With("error_message", err).Fatal("Unable to open config.")
+		c.GetLogger().With("error_message", err).Error("Unable to open config.")
+		panic("Unable to open config file.")
 	}
 
 	json.Unmarshal(content, &d.Content)

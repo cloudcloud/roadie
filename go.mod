@@ -3,7 +3,6 @@ module github.com/cloudcloud/roadie
 go 1.17
 
 require (
-	bou.ke/monkey v1.0.2
 	github.com/aws/aws-sdk-go v1.38.21
 	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/gin-contrib/cors v1.3.1
