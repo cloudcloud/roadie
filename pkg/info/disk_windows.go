@@ -31,7 +31,7 @@ func DiskDetails(d []string) []Disk {
 		disk := Disk{}
 
 		c.Call(
-			uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(volumePath))),
+			uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(x))),
 			uintptr(unsafe.Pointer(&disk.Free)),
 			uintptr(unsafe.Pointer(&disk.Size)),
 			uintptr(unsafe.Pointer(&disk.Available)))
