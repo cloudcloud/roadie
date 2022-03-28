@@ -102,3 +102,22 @@ func TestCopyToGood(t *testing.T) {
 		assert.Nil(err, "No error when things go well.")
 	})
 }
+
+func TestGetLocation(t *testing.T) {
+	assert := assert.New(t)
+
+	in := ""
+	l := &LocalPath{Location: in}
+	assert.Equal(in, l.GetLocation(), "Input matches output.")
+
+	in = "purple/monkey/dishwasher"
+	l = &LocalPath{Location: in}
+	assert.Equal(in, l.GetLocation(), "Input should match output.")
+}
+
+func TestType(t *testing.T) {
+	assert := assert.New(t)
+
+	l := &LocalPath{}
+	assert.Equal(SourceLocalPath, l.Type(), "LocalPath always returns the Type.")
+}
