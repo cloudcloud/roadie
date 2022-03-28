@@ -24,3 +24,4 @@ config.roadie.json
 .envrc
 pkg/data/test_data/
 pkg/destinations/test_data/
+test_data/*go
