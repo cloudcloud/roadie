@@ -121,3 +121,37 @@ func TestType(t *testing.T) {
 	l := &LocalPath{}
 	assert.Equal(SourceLocalPath, l.Type(), "LocalPath always returns the Type.")
 }
+
+func TestGetRefsBadPath(t *testing.T) {
+	assert := assert.New(t)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	z, _ := zap.NewProduction(zap.AddCaller())
+	conf := mocks.NewMockConfiger(ctrl)
+	conf.EXPECT().GetLogger().Times(1).Return(z.Sugar())
+
+	l := &LocalPath{Location: "...\\/empty/bad/directory", c: conf}
+
+	assert.NotPanics(func() {
+		found := l.GetRefs()
+
+		assert.Equal(0, len(found), "No references found in an unknown location.")
+	})
+}
+
+func TestGetRefs(t *testing.T) {
+	assert := assert.New(t)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	conf := mocks.NewMockConfiger(ctrl)
+
+	l := &LocalPath{Location: "", c: conf}
+
+	assert.NotPanics(func() {
+		found := l.GetRefs()
+
+		assert.NotEqual(0, len(found), "A non-zero number of files should be found.")
+	})
+}
