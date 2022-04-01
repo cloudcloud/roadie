@@ -9,7 +9,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
 	"github.com/cloudcloud/roadie/pkg/types"
 )
 
@@ -25,8 +27,8 @@ type S3 struct {
 	Profile string `json:"profile,omitempty"`
 
 	c          types.Configer
-	downloader *s3manager.Downloader
-	s3         *s3.S3
+	downloader s3manageriface.DownloaderAPI
+	s3         s3iface.S3API
 }
 
 // NewS3 will provision an S3 source.
