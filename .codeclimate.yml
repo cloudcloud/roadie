@@ -9,7 +9,7 @@ checks:
   file-lines:
     config:
       threshold: 500
-  line-length:
+  line_length:
     config:
       threshold: 120
   method-complexity:
@@ -36,6 +36,6 @@ plugins:
     enabled: true
   markdownlint:
     enabled: true
-  line-length:
+  line_length:
     config:
       threshold: 120
