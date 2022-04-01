@@ -10,6 +10,7 @@ import (
 	"github.com/cloudcloud/roadie/pkg/types"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
 )
 
 func TestGetMatchingRefsEmptyResponse(t *testing.T) {
@@ -55,11 +56,22 @@ func TestGetMatchingRefsError(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
+	// As we chain things through, and use our own interface here, the method signature
+	// will only allow the struct to be returned. This means we can validate that the
+	// first method in the chain is called, with the subsequent calls being out of our
+	// control.
+	z, _ := zap.NewProduction()
+	l := mocks.NewMockLogger(ctrl)
+	l.EXPECT().With("error_message", gomock.Any()).Times(1).Return(z.Sugar())
+
+	c := mocks.NewMockConfiger(ctrl)
+	c.EXPECT().GetLogger().Times(1).Return(l)
+
 	s3mock := mocks.NewMockS3API(ctrl)
 	s3mock.EXPECT().ListObjectsV2(gomock.Any()).Times(1).Return(&s3.ListObjectsV2Output{}, errors.New("err"))
 
 	assert.NotPanics(func() {
-		s := &S3{Bucket: "bucket", Path: "/", s3: s3mock}
+		s := &S3{Bucket: "bucket", Path: "/", s3: s3mock, c: c}
 		refs := s.GetMatchingRefs(types.Reference{Entry: "file"})
 
 		assert.Equal(0, len(refs), "No results when an error occurs.")

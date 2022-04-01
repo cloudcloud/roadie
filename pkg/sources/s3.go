@@ -1,7 +1,6 @@
 package sources
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -98,7 +97,7 @@ func (s *S3) GetMatchingRefs(r types.Reference) (refs []types.Reference) {
 
 	res, err := s.s3.ListObjectsV2(in)
 	if err != nil {
-		log.Printf("Had this error, [%s]\n", err)
+		s.c.GetLogger().With("error_message", err).Error("Unable to pull matching refs from S3.")
 	}
 
 	for _, x := range res.Contents {
@@ -127,7 +126,7 @@ func (s *S3) GetRefs() (r []types.Reference) {
 
 	res, err := s.s3.ListObjectsV2(in)
 	if err != nil {
-		log.Printf("Had an error [%s]\n", err)
+		s.c.GetLogger().With("error_message", err).Error("Could not retrieve refs from S3.")
 	}
 
 	for _, x := range res.CommonPrefixes {

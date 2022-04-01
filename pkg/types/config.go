@@ -1,16 +1,12 @@
 package types
 
-import (
-	"go.uber.org/zap"
-)
-
 // Configer is an expected behaviour to be provided by some form
 // of configuration struct.
 type Configer interface {
 	GetConfigFile() string
 	GetHostname() string
 	GetListener() string
-	GetLogger() *zap.SugaredLogger
+	GetLogger() Logger
 }
 
 // Reference is an individual entry that is located within a Source

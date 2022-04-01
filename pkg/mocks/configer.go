@@ -7,8 +7,8 @@ package mocks
 import (
 	reflect "reflect"
 
+	types "github.com/cloudcloud/roadie/pkg/types"
 	gomock "github.com/golang/mock/gomock"
-	zap "go.uber.org/zap"
 )
 
 // MockConfiger is a mock of Configer interface.
@@ -77,10 +77,10 @@ func (mr *MockConfigerMockRecorder) GetListener() *gomock.Call {
 }
 
 // GetLogger mocks base method.
-func (m *MockConfiger) GetLogger() *zap.SugaredLogger {
+func (m *MockConfiger) GetLogger() types.Logger {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLogger")
-	ret0, _ := ret[0].(*zap.SugaredLogger)
+	ret0, _ := ret[0].(types.Logger)
 	return ret0
 }
 
