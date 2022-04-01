@@ -15,6 +15,8 @@ import (
 )
 
 const (
+	// SourceS3 is the identifier to be used for association with
+	// a source that is coming from S3.
 	SourceS3 = "s3"
 )
 

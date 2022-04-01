@@ -10,6 +10,8 @@ import (
 )
 
 const (
+	// SourceLocalPath is the identifier to be used with associating
+	// a source that uses the local filesystem.
 	SourceLocalPath = "local_path"
 )
 

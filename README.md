@@ -6,5 +6,6 @@
 
 ## intro
 
-``roadie`` is a small tool to allow for the temporary relocation of files between locations, based on a configurable type pattern with a basic web interface.
+``roadie`` is a small tool to allow for the temporary relocation of files between locations, based on a configurable
+type pattern with a basic web interface.
 

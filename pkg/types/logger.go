@@ -2,6 +2,8 @@ package types
 
 import "go.uber.org/zap"
 
+// Logger is an interface to be used with the zap.SugaredLogger struct, allowing
+// us to better describe and work with the external pkg.
 type Logger interface {
 	DPanic(...interface{})
 	DPanicf(string, ...interface{})

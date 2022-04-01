@@ -8,6 +8,8 @@ import (
 )
 
 const (
+	// DestinationLocalPath is the identifier that is used to represent a
+	// destination within the local filesystem.
 	DestinationLocalPath = "local_path"
 )
 
