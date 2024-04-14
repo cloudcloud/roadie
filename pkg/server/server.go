@@ -1,14 +1,23 @@
 package server
 
 import (
+	"bytes"
+	"embed"
+	"log"
+	"net/http"
+	"path"
+	"strings"
 	"time"
 
 	"github.com/cloudcloud/roadie/pkg/data"
 	"github.com/cloudcloud/roadie/pkg/types"
-	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
+
+//go:embed dist/js/*.js dist/css/*.css
+//go:embed dist/fonts dist/index.html
+var dist embed.FS
 
 var (
 	skip = map[string]struct{}{
@@ -45,9 +54,9 @@ func New(c types.Configer) Server {
 		push(c, d),
 	)
 
-	addFS(g, "/js", "js/")
-	addFS(g, "/css", "css/")
-	addFS(g, "/fonts", "fonts/")
+	addFS(g, "/js")
+	addFS(g, "/css")
+	addFS(g, "/fonts")
 
 	g.GET("/", index)
 	g.GET("/sources", index)
@@ -71,15 +80,11 @@ func New(c types.Configer) Server {
 	}
 }
 
-func addFS(g *gin.Engine, pre, post string) {
-	g.StaticFS(pre,
-		&assetfs.AssetFS{
-			Asset:     Asset,
-			AssetDir:  AssetDir,
-			AssetInfo: AssetInfo,
-			Prefix:    post,
-		},
-	)
+func addFS(g *gin.Engine, pre string) {
+	g.GET(pre+"/*filepath", func(c *gin.Context) {
+		log.Println(c.Request.URL.Path)
+		c.FileFromFS(path.Join("dist", c.Request.URL.Path), http.FS(dist))
+	})
 }
 
 // Start will begin the HTTP request handling process.
@@ -125,4 +130,28 @@ func logger(c types.Configer) gin.HandlerFunc {
 			).Info("access_log")
 		}
 	}
+}
+
+func index(c *gin.Context) {
+	f, err := dist.ReadFile("dist/index.html")
+	if err != nil {
+		// in lieu of something proper
+		panic(err)
+	}
+
+	s := strings.Replace(
+		string(f),
+		"<head>",
+		"<head><script id=\"config\">{\"hostname\":\""+c.MustGet("config").(types.Configer).GetHostname()+"\"}</script>",
+		1,
+	)
+
+	r := bytes.NewReader([]byte(s))
+	c.DataFromReader(
+		http.StatusOK,
+		int64(len(s)),
+		"text/html",
+		r,
+		map[string]string{},
+	)
 }

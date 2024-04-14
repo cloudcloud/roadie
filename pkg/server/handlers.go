@@ -1,10 +1,8 @@
 package server
 
 import (
-	"bytes"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/cloudcloud/roadie/pkg/data"
@@ -71,24 +69,6 @@ func historical(c *gin.Context) {
 
 		return h, []string{}
 	})
-}
-
-func index(c *gin.Context) {
-	s := strings.Replace(
-		MustAssetString("index.html"),
-		"<head>",
-		"<head><script id=\"config\">{\"hostname\":\""+c.MustGet("config").(types.Configer).GetHostname()+"\"}</script>",
-		1,
-	)
-
-	r := bytes.NewReader([]byte(s))
-	c.DataFromReader(
-		http.StatusOK,
-		int64(len(s)),
-		"text/html",
-		r,
-		map[string]string{},
-	)
 }
 
 func remove(c *gin.Context) {
