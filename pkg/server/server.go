@@ -3,7 +3,6 @@ package server
 import (
 	"bytes"
 	"embed"
-	"log"
 	"net/http"
 	"path"
 	"strings"
@@ -82,7 +81,6 @@ func New(c types.Configer) Server {
 
 func addFS(g *gin.Engine, pre string) {
 	g.GET(pre+"/*filepath", func(c *gin.Context) {
-		log.Println(c.Request.URL.Path)
 		c.FileFromFS(path.Join("dist", c.Request.URL.Path), http.FS(dist))
 	})
 }
