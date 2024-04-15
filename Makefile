@@ -46,6 +46,7 @@ docker.push:
 	$V docker push cloudcloud/roadie:latest
 
 install: build-fe ; $(info $(C) installing $(PROJECT))
+	$V cp -r ./dist ./pkg/server/dist
 	$V $(GO) build ./cmd/$(PROJECT)/
 
 local:
