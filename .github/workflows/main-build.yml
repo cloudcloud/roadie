@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: 18
       - name: 'Build Frontend Artefacts'
-        run: yarn && yarn build
+        run: yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
       - name: 'Mirror Dist'
         run: cp -r ./dist ./pkg/server/dist
       - name: 'Run Tests'
