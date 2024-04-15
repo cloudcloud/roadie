@@ -10,10 +10,9 @@ WORKDIR "/rd"
 COPY . .
 COPY --from=fe ["/app/dist/", "dist/"]
 RUN apk add --no-cache git && \
-      GO111MODULE=off go get -u github.com/kevinburke/go-bindata/... && \
-      go-bindata -o ./pkg/server/assets.go -pkg server -prefix dist/ dist/... && \
-      go build ./cmd/roadie && \
-      mv roadie /
+    cp -r ./dist ./pkg/server/dist && \
+    go build ./cmd/roadie && \
+    mv roadie /
 
 FROM golang:alpine AS release
 ENTRYPOINT ["/roadie"]
