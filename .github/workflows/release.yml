@@ -1,0 +1,12 @@
+name: release build
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    name: 'Build All Artefacts'
