@@ -12,7 +12,7 @@
     "elliptic": "6.5.4",
     "sass": "1.32.8",
     "sass-loader": "10.1.1",
-    "vue": "^2.6.12",
+    "vue": "^2.7.16",
     "vue-router": "3.5.1",
     "vuetify": "2.4.9",
     "vuex": "^3.6.0",
@@ -30,9 +30,9 @@
     "eslint-plugin-vue": "7.8.0",
     "stylus": "^0.54.8",
     "stylus-loader": "4.3.3",
-    "vue-cli-plugin-vuetify": "^2.0.7",
-    "vue-template-compiler": "^2.5.17",
-    "vuetify-loader": "^1.6.0"
+    "vue-cli-plugin-vuetify": "^2.5.8",
+    "vue-template-compiler": "^2.7.16",
+    "vuetify-loader": "^1.9.2"
   },
   "eslintConfig": {
     "root": true,
