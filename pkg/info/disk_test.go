@@ -9,7 +9,7 @@ import (
 func TestDiskDetailsEmpty(t *testing.T) {
 	assert := assert.New(t)
 
-	input := []string{}
+	input := ""
 	assert.NotPanics(func() {
 		response := DiskDetails(input)
 
@@ -20,12 +20,12 @@ func TestDiskDetailsEmpty(t *testing.T) {
 func TestDiskDetailsCWD(t *testing.T) {
 	assert := assert.New(t)
 
-	input := []string{"."}
+	input := "."
 	assert.NotPanics(func() {
 		response := DiskDetails(input)
 
-		assert.Equal(len(input), len(response), "The input and output length should be the same.")
-		assert.NotEqual(uint64(0), response[0].Used, "There should be a non-zero amount of Used space.")
-		assert.Equal(input[0], response[0].Path, "The input path should be in the response result.")
+		assert.NotEqual(Disk{}, response, "The output should not be empty.")
+		assert.NotEqual(uint64(0), response.Used, "There should be a non-zero amount of Used space.")
+		assert.Equal(input, response.Path, "The input path should be in the response result.")
 	})
 }

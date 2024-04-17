@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/cloudcloud/roadie/pkg/destinations"
+	"github.com/cloudcloud/roadie/pkg/info"
 	"github.com/cloudcloud/roadie/pkg/sources"
 	"github.com/cloudcloud/roadie/pkg/types"
 )
@@ -112,6 +113,23 @@ func (d *Data) GetDestinationRefs(s string) []types.Reference {
 // GetDestinations will return a list of the available destinations.
 func (d *Data) GetDestinations() []types.Destination {
 	return d.Content.Destinations
+}
+
+func (d *Data) GetDestinationsWithDetails() []any {
+	output := []any{}
+
+	destinations := d.Content.Destinations
+	for _, v := range destinations {
+		output = append(output, map[string]interface{}{
+			"config":    v.Config,
+			"href":      v.Href,
+			"name":      v.Name,
+			"type":      v.Type,
+			"disk_info": info.DiskDetails(v.Store.GetLocation()),
+		})
+	}
+
+	return output
 }
 
 // GetHistories will provide a list of the historical record from this configuration.

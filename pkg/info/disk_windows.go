@@ -19,26 +19,21 @@ type Disk struct {
 	Used      int64  `json:"used"`
 }
 
-// DiskDetails will accept a list of strings that comprise a list of paths
-// in the local file system to then provide usage information for each.
-func DiskDetails(d []string) []Disk {
-	i := []Disk{}
-
+// DiskDetails will accept a string that represents a path in the local
+// file system, to then provide usage information for it.
+func DiskDetails(d string) Disk {
 	h := syscall.MustLoadDLL("kernel32.dll")
 	c := h.MustFindProc("GetDiskFreeSpaceExW")
 
-	for _, x := range d {
-		disk := Disk{}
+	disk := Disk{}
 
-		c.Call(
-			uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(x))),
-			uintptr(unsafe.Pointer(&disk.Free)),
-			uintptr(unsafe.Pointer(&disk.Size)),
-			uintptr(unsafe.Pointer(&disk.Available)))
+	c.Call(
+		uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(d))),
+		uintptr(unsafe.Pointer(&disk.Free)),
+		uintptr(unsafe.Pointer(&disk.Size)),
+		uintptr(unsafe.Pointer(&disk.Available)))
 
-		disk.Used = disk.Size - disk.Free
-		i = append(i, disk)
-	}
+	disk.Used = disk.Size - disk.Free
 
-	return i
+	return disk
 }

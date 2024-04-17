@@ -7,7 +7,6 @@ import (
 
 	"github.com/cloudcloud/roadie/pkg/data"
 	dest "github.com/cloudcloud/roadie/pkg/destinations"
-	"github.com/cloudcloud/roadie/pkg/info"
 	sour "github.com/cloudcloud/roadie/pkg/sources"
 	"github.com/cloudcloud/roadie/pkg/types"
 	"github.com/gin-gonic/gin"
@@ -15,18 +14,9 @@ import (
 
 func config(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
-		paths := []string{}
-
-		for _, p := range d.GetDestinations() {
-			if p.Type == dest.DestinationLocalPath {
-				paths = append(paths, p.Store.GetLocation())
-			}
-		}
-
-		i := info.DiskDetails(paths)
-
 		return gin.H{
-			"disk_info": i,
+			"destinations": d.GetDestinationsWithDetails(),
+			"sources":      d.GetSources(),
 		}, []string{}
 	})
 }
