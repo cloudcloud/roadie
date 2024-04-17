@@ -6,9 +6,13 @@
         <v-card shaped>
 
           <v-card-title>
-            <span>sources</span>
-            <v-spacer />
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+            <v-row justify="center" align="center">
+              <v-col cols="6" align="left">sources</v-col>
+
+              <v-col cols="6">
+                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+              </v-col>
+            </v-row>
           </v-card-title>
 
           <v-data-table :headers="headers" :items="sources" :search="search" class="elevation-1">

@@ -6,9 +6,15 @@
         <v-card shaped>
 
           <v-card-title>
-            <span>source</span> | <span>{{source_name}}</span>
-            <v-spacer />
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+            <v-row justify="center" align="center">
+              <v-col cols="6" align="left">
+                <span>source</span> | <span>{{source_name}}</span>
+              </v-col>
+
+              <v-col cols="6">
+                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+              </v-col>
+            </v-row>
           </v-card-title>
 
           <v-data-table :headers="headersExpanded" :items="source.entries" :search="search" :single-expand="singleExpand" :expanded.sync="expanded" item-key="entry" show-expand class="elevation-1" v-if="isExpandable">
