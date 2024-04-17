@@ -14,8 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//go:embed dist/js/*.js dist/css/*.css
-//go:embed dist/fonts dist/index.html
+//go:embed dist/**
 var dist embed.FS
 
 var (

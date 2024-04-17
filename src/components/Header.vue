@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar color="secondary" app>
+    <v-app-bar color="deep-purple-darken-3" app>
       <v-spacer />
 
       <v-btn class="mx-2" ripple small to="/"><span>Home</span></v-btn>

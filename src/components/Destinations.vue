@@ -6,9 +6,15 @@
         <v-card shaped>
 
           <v-card-title>
-            destinations
-            <v-spacer></v-spacer>
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
+            <v-row justify="center" align="center">
+              <v-col cols="6" align="left">
+                destinations
+              </v-col>
+
+              <v-col cols="6">
+                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
+              </v-col>
+            </v-row>
           </v-card-title>
 
           <v-data-table :headers="headers" :items="destinations" :search="search" class="elevation-1">

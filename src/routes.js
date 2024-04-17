@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
 import Home from './components/Home';
 import Sources from './components/Sources';
@@ -8,10 +7,8 @@ import Destinations from './components/Destinations';
 import Destination from './components/Destination';
 import Config from './components/Config';
 
-Vue.use(VueRouter);
-
-export default new VueRouter({
-  mode: 'history',
+export default createRouter({
+  history: createWebHistory(),
   routes: [
     {path: '/', name: 'Home', component: Home},
     {path: '/sources', name: 'Sources', component: Sources},
