@@ -1,4 +1,4 @@
-name: roadie standard commit build
+name: build
 
 on:
   push:
