@@ -25,7 +25,7 @@ jobs:
       - name: 'Setup Node'
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: 'Build Frontend Artefacts'
         run: yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
       - name: 'Run Tests'
@@ -65,7 +65,7 @@ jobs:
       - name: 'Setup Node'
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: 'Build Frontend Artefacts'
         run: yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
       - name: 'Matrix Binary Compilation'
