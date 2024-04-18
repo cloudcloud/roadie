@@ -12,7 +12,9 @@
               </v-col>
 
               <v-col cols="6">
-                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+                <v-text-field v-model="search" single-line hide-details clearable placeholder="evil" variant="underlined">
+                  <v-icon :icon="`${mdiMagnify}`"></v-icon>
+                </v-text-field>
               </v-col>
             </v-row>
           </v-card-title>
@@ -69,11 +71,12 @@
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 import SubSource from './SubSource';
-import { mdiArrowRightThinCircleOutline } from '@mdi/js';
+import { mdiArrowRightThinCircleOutline, mdiMagnify } from '@mdi/js';
 
 export default {
   data: () => ({
     mdiArrowRightThinCircleOutline,
+    mdiMagnify,
     headers: [
       {title: 'Name', align: 'left', key: 'entry'},
       {title: 'Actions', key: 'action'},

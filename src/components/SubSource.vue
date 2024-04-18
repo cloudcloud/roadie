@@ -37,8 +37,8 @@ import { mapActions, mapMutations, mapGetters } from 'vuex';
 export default {
   data: () => ({
     headers: [
-      {text: 'Name', align: 'left', value: 'entry'},
-      {text: 'Actions', value: 'action'},
+      {title: 'Name', align: 'left', key: 'entry'},
+      {title: 'Actions', key: 'action'},
     ],
     sub_source: {},
     dialog: false,

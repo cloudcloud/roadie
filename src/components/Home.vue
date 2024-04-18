@@ -10,7 +10,9 @@
               <v-col cols="6" align="left">roadie</v-col>
 
               <v-col cols="6">
-                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+                <v-text-field v-model="search" clearable variant="underlined" single-line hide-details>
+                  <v-icon :icon="`${mdiMagnify}`"></v-icon>
+                </v-text-field>
               </v-col>
             </v-row>
           </v-card-title>
@@ -33,14 +35,16 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { mdiMagnify } from '@mdi/js';
 
 export default {
   data: () => ({
+    mdiMagnify,
     headers: [
-      {text: 'Source', align: 'left', value: 'source.name'},
-      {text: 'Destination', align: 'left', value: 'destination.name'},
-      {text: 'Pattern', align: 'left', value: 'pattern'},
-      {text: 'Date', align: 'left', value: 'occurred_at'},
+      {title: 'Source', align: 'left', key: 'source.name'},
+      {title: 'Destination', align: 'left', key: 'destination.name'},
+      {title: 'Pattern', align: 'left', key: 'pattern'},
+      {title: 'Date', align: 'left', key: 'occurred_at'},
     ],
     historical: [],
     search: '',

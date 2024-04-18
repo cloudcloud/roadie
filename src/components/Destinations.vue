@@ -12,7 +12,9 @@
               </v-col>
 
               <v-col cols="6">
-                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
+                <v-text-field v-model="search" single-line hide-details clearable placeholder="evil" variant="underlined">
+                  <v-icon :icon="`${mdiMagnify}`"></v-icon>
+                </v-text-field>
               </v-col>
             </v-row>
           </v-card-title>
@@ -32,13 +34,15 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { mdiMagnify } from '@mdi/js';
 
 export default {
   data: () => ({
+    mdiMagnify,
     headers: [
-      {text: 'Name', align: 'left', value: 'name'},
-      {text: 'Location', align: 'left', value: 'config.location'},
-      {text: 'Type', align: 'left', value: 'type'},
+      {title: 'Name', align: 'left', key: 'name'},
+      {title: 'Location', align: 'left', key: 'config.location'},
+      {title: 'Type', align: 'left', key: 'type'},
     ],
     destinations: [],
     search: '',
