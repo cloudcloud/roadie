@@ -18,7 +18,7 @@ func TestGetMatchingRefsEmptyResponse(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	s3mock := mocks.NewMockS3API(ctrl)
+	s3mock := NewMockS3API(ctrl)
 	s3mock.EXPECT().ListObjectsV2(gomock.Any()).Times(1).Return(&s3.ListObjectsV2Output{}, nil)
 
 	assert.NotPanics(func() {
@@ -34,7 +34,7 @@ func TestGetMatchingRefsBasicResponse(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	s3mock := mocks.NewMockS3API(ctrl)
+	s3mock := NewMockS3API(ctrl)
 	s3mock.EXPECT().ListObjectsV2(gomock.Any()).Times(1).Return(&s3.ListObjectsV2Output{
 		Contents: []*s3.Object{
 			&s3.Object{
@@ -67,7 +67,7 @@ func TestGetMatchingRefsError(t *testing.T) {
 	c := mocks.NewMockConfiger(ctrl)
 	c.EXPECT().GetLogger().Times(1).Return(l)
 
-	s3mock := mocks.NewMockS3API(ctrl)
+	s3mock := NewMockS3API(ctrl)
 	s3mock.EXPECT().ListObjectsV2(gomock.Any()).Times(1).Return(&s3.ListObjectsV2Output{}, errors.New("err"))
 
 	assert.NotPanics(func() {
@@ -83,7 +83,7 @@ func TestGetRefsEmptyResponse(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	s3mock := mocks.NewMockS3API(ctrl)
+	s3mock := NewMockS3API(ctrl)
 	s3mock.EXPECT().ListObjectsV2(gomock.Any()).Times(1).Return(&s3.ListObjectsV2Output{}, nil)
 
 	assert.NotPanics(func() {
@@ -99,7 +99,7 @@ func TestGetRefsBasicResponse(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	s3mock := mocks.NewMockS3API(ctrl)
+	s3mock := NewMockS3API(ctrl)
 	s3mock.EXPECT().ListObjectsV2(gomock.Any()).Times(1).Return(&s3.ListObjectsV2Output{
 		CommonPrefixes: []*s3.CommonPrefix{
 			&s3.CommonPrefix{
@@ -133,7 +133,7 @@ func TestGetRefsError(t *testing.T) {
 	c := mocks.NewMockConfiger(ctrl)
 	c.EXPECT().GetLogger().Times(1).Return(l)
 
-	s3mock := mocks.NewMockS3API(ctrl)
+	s3mock := NewMockS3API(ctrl)
 	s3mock.EXPECT().ListObjectsV2(gomock.Any()).Times(1).Return(&s3.ListObjectsV2Output{}, errors.New("err"))
 
 	assert.NotPanics(func() {
