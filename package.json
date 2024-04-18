@@ -22,7 +22,7 @@
     "y18n": "5.0.8"
   },
   "devDependencies": {
-    "@mdi/font": "7.4.47",
+    "@mdi/font": "^7.4.47",
     "@mdi/js": "7.4.47",
     "@vue/cli-plugin-babel": "5.0.8",
     "@vue/cli-service": "5.0.8",
