@@ -1,11 +1,10 @@
 import axios from 'axios';
 
-const el = document.getElementById('config');
-const c = JSON.parse(el.innerHTML);
+const url = document.querySelector('#RoadieBaseURL').getAttribute('content');
 const client = axios.create({
-  baseURL: c.hostname,
+  baseURL: url,
   json: true,
-})
+});
 
 const apiClient = {
   getConfig() {
