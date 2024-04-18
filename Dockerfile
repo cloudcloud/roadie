@@ -8,9 +8,8 @@ FROM golang:alpine AS be
 
 WORKDIR "/rd"
 COPY . .
-COPY --from=fe ["/app/dist/", "dist/"]
+COPY --from=fe ["/app/pkg/server/dist/", "pkg/server/dist/"]
 RUN apk add --no-cache git && \
-    cp -r ./dist ./pkg/server/dist && \
     go build ./cmd/roadie && \
     mv roadie /
 

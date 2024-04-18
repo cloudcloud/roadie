@@ -1,4 +1,4 @@
-name: release build
+name: release
 
 on:
   push:
@@ -25,11 +25,9 @@ jobs:
       - name: 'Setup Node'
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: 'Build Frontend Artefacts'
         run: yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
-      - name: 'Mirror Dist'
-        run: cp -r ./dist ./pkg/server/dist
       - name: 'Compile Binary'
         run: mkdir bin && GOOS=${{ matrix.os }} GOARCH=amd64 go build -o bin/roadie-${{ matrix.os }}-amd64 ./cmd/roadie
       - name: 'Archive Binary'

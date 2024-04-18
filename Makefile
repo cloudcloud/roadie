@@ -14,7 +14,6 @@ binaries: ; $(info $(C) building all binaries)
 binary: GOARCH?=amd64
 binary: GOOS?=linux
 binary: ; $(info $(C) building binary $(PROJECT).$(GOARCH)-$(GOOS))
-	$V cp -r ./dist ./pkg/server/dist
 	$V $(GO) build -o dist/$(PROJECT).$(GOARCH)-$(GOOS) ./cmd/$(PROJECT)
 	$V if [ "$(GOOS)" = "windows" ]; then \
 		$V mv dist/$(PROJECT).$(GOARCH)-$(GOOS) dist/$(PROJECT).$(GOARCH)-$(GOOS).exe; \
@@ -24,7 +23,7 @@ build-fe: ; $(info $(C) building the frontend assets)
 	$V yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
 
 clean: ; $(info $(C) cleaning assets and dist)
-	$V rm -rf dist pkg/server/dist
+	$V rm -rf pkg/server/dist
 
 coverage: ; $(info $(C) running coverage)
 	$V $(GO) test -race -covermode=atomic -coverprofile=c.out ./...
@@ -32,7 +31,7 @@ coverage: ; $(info $(C) running coverage)
 	$V $(GO) tool cover -html=c.out -o cover.html
 
 # at this time, there's no watch enabled for the go binary
-dev-be: bin-prep bin-dist install ; $(info $(C) building back-end for dev)
+dev-be: install ; $(info $(C) building back-end for dev)
 	$V CONFIG_FILE=$(CONFIG_FILE) $(PROJECT)
 
 # dev-fe is a watch task with built-in node server
@@ -46,7 +45,6 @@ docker.push:
 	$V docker push cloudcloud/roadie:latest
 
 install: build-fe ; $(info $(C) installing $(PROJECT))
-	$V rm -rf ./pkg/server/dist && cp -r ./dist ./pkg/server/dist
 	$V $(GO) build ./cmd/$(PROJECT)/
 
 local:

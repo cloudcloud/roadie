@@ -1,4 +1,4 @@
-name: roadie standard commit build
+name: build
 
 on:
   push:
@@ -25,11 +25,9 @@ jobs:
       - name: 'Setup Node'
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: 'Build Frontend Artefacts'
         run: yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
-      - name: 'Mirror Dist'
-        run: cp -r ./dist ./pkg/server/dist
       - name: 'Run Tests'
         run: go test -cover -coverprofile=coverage.txt ./...
       - name: 'Archive Coverage Results'
@@ -67,11 +65,9 @@ jobs:
       - name: 'Setup Node'
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: 'Build Frontend Artefacts'
         run: yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
-      - name: 'Mirror Dist'
-        run: cp -r ./dist ./pkg/server/dist
       - name: 'Matrix Binary Compilation'
         run: GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o dist/roadie.${{ matrix.arch }}-${{ matrix.os }} ./cmd/roadie
       - name: 'Archive Binary'

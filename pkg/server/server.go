@@ -138,8 +138,8 @@ func index(c *gin.Context) {
 
 	s := strings.Replace(
 		string(f),
-		"<head>",
-		"<head><script id=\"config\">{\"hostname\":\""+c.MustGet("config").(types.Configer).GetHostname()+"\"}</script>",
+		"[ROADIE_BASE_URL]",
+		c.MustGet("config").(types.Configer).GetHostname(),
 		1,
 	)
 

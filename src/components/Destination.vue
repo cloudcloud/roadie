@@ -8,11 +8,13 @@
           <v-card-title>
             <v-row justify="center" align="center">
               <v-col cols="6" align="left">
-                <span>destination</span> | <span>{{destination_name}}</span>
+                <span>destination <v-icon :icon="`${mdiArrowRightThinCircleOutline}`"></v-icon> {{destination_name}}</span>
               </v-col>
 
               <v-col cols="6">
-                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+                <v-text-field v-model="search" single-line hide-details clearable variant="underlined">
+                  <v-icon :icon="`${mdiMagnify}`"></v-icon>
+                </v-text-field>
               </v-col>
             </v-row>
           </v-card-title>
@@ -53,12 +55,15 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { mdiArrowRightThinCircleOutline, mdiMagnify } from '@mdi/js';
 
 export default {
   data: () => ({
+    mdiMagnify,
+    mdiArrowRightThinCircleOutline,
     headers: [
-      {text: 'Name', align: 'left', value: 'entry'},
-      {text: 'Actions', value: 'action'},
+      {title: 'Name', align: 'left', key: 'entry'},
+      {title: 'Actions', key: 'action'},
     ],
     destination: {},
     dialog: false,

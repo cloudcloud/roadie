@@ -10,16 +10,18 @@
               <v-col cols="6" align="left">sources</v-col>
 
               <v-col cols="6">
-                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details />
+                <v-text-field v-model="search" variant="underlined" clearable placeholder="evil" single-line hide-details>
+                  <v-icon :icon="`${mdiMagnify}`"></v-icon>
+                </v-text-field>
               </v-col>
             </v-row>
           </v-card-title>
 
-          <v-data-table :headers="headers" :items="sources" :search="search" class="elevation-1">
+          <v-data-table-virtual :headers="headers" :items="sources" :search="search" class="elevation-1">
             <template v-slot:item.name="{ item }">
               <router-link :to="item.href">{{ item.name }}</router-link>
             </template>
-          </v-data-table>
+          </v-data-table-virtual>
 
         </v-card>
       </v-col>
@@ -30,14 +32,16 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { mdiMagnify } from '@mdi/js';
 
 export default {
   data: () => ({
+    mdiMagnify,
     headers: [
-      {text: 'Name', align: 'left', value: 'name'},
-      {text: 'Bucket', align: 'left', value: 'config.bucket'},
-      {text: 'Path', align: 'left', value: 'config.path'},
-      {text: 'Type', align: 'left', value: 'type'},
+      {title: 'Name', align: 'left', key: 'name'},
+      {title: 'Bucket', align: 'left', key: 'config.bucket'},
+      {title: 'Path', align: 'left', key: 'config.path'},
+      {title: 'Type', align: 'left', key: 'type'},
     ],
     sources: [],
     search: '',
