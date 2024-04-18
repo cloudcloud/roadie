@@ -28,8 +28,6 @@ jobs:
           node-version: 18
       - name: 'Build Frontend Artefacts'
         run: yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
-      - name: 'Mirror Dist'
-        run: cp -r ./dist ./pkg/server/dist
       - name: 'Run Tests'
         run: go test -cover -coverprofile=coverage.txt ./...
       - name: 'Archive Coverage Results'
@@ -70,8 +68,6 @@ jobs:
           node-version: 18
       - name: 'Build Frontend Artefacts'
         run: yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
-      - name: 'Mirror Dist'
-        run: cp -r ./dist ./pkg/server/dist
       - name: 'Matrix Binary Compilation'
         run: GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o dist/roadie.${{ matrix.arch }}-${{ matrix.os }} ./cmd/roadie
       - name: 'Archive Binary'
