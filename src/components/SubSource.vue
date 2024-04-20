@@ -1,44 +1,41 @@
 <template>
-  <div>
-    <v-simple-table>
-      <template v-slot:default>
-        <tbody>
-          <tr v-for="item in sub_source.entries" :key="item.entry">
-            <td>{{ item.entry }}</td>
-            <td>
-              <v-btn block small @click="copy(item.entry)">Copy</v-btn>
-            </td>
-          </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
+  <v-data-table :items="sub_source.entries" :items-per-page="0" :headers="headers" hover no-filter disable-pagination hide-default-header>
+    <template v-slot:item.action="{ item }">
+      <v-btn block small @click="copy(item.entry)">
+        <v-icon :icon="`${mdiMagnify}`"></v-icon> Copy
+      </v-btn>
+    </template>
+    <template v-slot:headers="{ }"><!-- skip! --></template>
+    <template #bottom></template>
+  </v-data-table>
 
-    <v-dialog v-model="dialog" max-width="500">
-      <v-card :loading="loading" class="mx-auto">
-        <v-card-title>Copy</v-card-title>
-        <v-card-subtitle>Copying {{ entry }}. What is the desired Destination?</v-card-subtitle>
-        <v-card-text>
-          <v-combobox dense outlined persistent-hint solo autofocus v-model="destination" item-text="name" :items="destinations"></v-combobox>
-        </v-card-text>
+  <v-dialog v-model="dialog" max-width="500">
+    <v-card :loading="loading" class="mx-auto">
+      <v-card-title>Copy</v-card-title>
+      <v-card-subtitle>Copying {{ entry }}. What is the desired Destination?</v-card-subtitle>
+      <v-card-text>
+        <v-combobox dense outlined persistent-hint solo autofocus v-model="destination" item-text="name" :items="destinations"></v-combobox>
+      </v-card-text>
 
-        <v-card-actions>
-          <v-spacer />
-          <v-btn @click="close">Cancel</v-btn>
-          <v-btn @click="save">Copy</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn @click="close">Cancel</v-btn>
+        <v-btn @click="save">Copy</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { mdiMagnify } from '@mdi/js';
 
 export default {
   data: () => ({
+    mdiMagnify,
     headers: [
-      {title: 'Name', align: 'left', key: 'entry'},
-      {title: 'Actions', key: 'action'},
+      {sortable: false, key: 'entry'},
+      {sortable: false, key: 'action'},
     ],
     sub_source: {},
     dialog: false,
