@@ -21,7 +21,7 @@
 
           <v-data-table-virtual :headers="headersExpanded" :items="source.entries" :search="search" :single-expand="singleExpand" :expanded.sync="expanded" item-value="entry" show-expand class="elevation-1" height="100%" v-if="isExpandable">
             <template v-slot:item.action="{ item }">
-              <CopyDialog :source_name="source.source.name" :entry_name="item.entry" />
+              <CopyDialog :source_name="source.source.name" :entry_name="item.entry + '/'" />
             </template>
             <template v-slot:expanded-row="{ columns,item }">
               <tr>

@@ -21,7 +21,9 @@
 
           <v-data-table :headers="headers" :items="destination.entries" :search="search" class="elevation-1">
             <template v-slot:item.action="{ item }">
-              <v-btn block small @click="remove(item.entry)">Remove</v-btn>
+              <v-btn block small @click="remove(item.entry)">
+                <v-icon :icon="`${mdiTrashCanOutline}`"></v-icon> Remove
+              </v-btn>
             </template>
           </v-data-table>
 
@@ -55,12 +57,13 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
-import { mdiArrowRightThinCircleOutline, mdiMagnify } from '@mdi/js';
+import { mdiArrowRightThinCircleOutline, mdiMagnify, mdiTrashCanOutline } from '@mdi/js';
 
 export default {
   data: () => ({
     mdiMagnify,
     mdiArrowRightThinCircleOutline,
+    mdiTrashCanOutline,
     headers: [
       {title: 'Name', align: 'left', key: 'entry'},
       {title: 'Actions', key: 'action'},
