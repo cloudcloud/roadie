@@ -7,12 +7,8 @@
       <v-data-table-virtual :items="items" :items-per-page="0" :headers="headers" hover no-filter disable-pagination>
         <template v-slot:item.action="{ item }">
           <v-spacer></v-spacer>
-          <v-btn @click="edit">
-            <v-icon :icon="`${mdiWrenchOutline}`"></v-icon> Edit
-          </v-btn>
-          <v-btn @click="remove" color="error">
-            <v-icon :icon="`${mdiTrashCanOutline}`"></v-icon> Delete
-          </v-btn>
+          <ConfigEditDialog :name="item.name" :fullObj="item" :type="type"></ConfigEditDialog>
+          <ConfigRemoveDialog :name="item.name" :fullObj="item" :type="type"></ConfigRemoveDialog>
           <v-spacer></v-spacer>
         </template>
 
@@ -28,65 +24,49 @@
       </v-data-table-virtual>
     </v-card-text>
   </v-card>
-
-  <v-dialog v-model="editDialog" max-width="500">
-  </v-dialog>
-
-  <v-dialog v-model="removeDialog" max-width="500">
-  </v-dialog>
 </template>
 
 <script>
-import { mdiWrenchOutline, mdiTrashCanOutline } from '@mdi/js';
+import ConfigEditDialog from './ConfigEditDialog';
+import ConfigRemoveDialog from './ConfigRemoveDialog';
 
 export default {
   data: () => ({
-    mdiWrenchOutline,
-    mdiTrashCanOutline,
-    editDialog: false,
-    removeDialog: false,
   }),
-  props: ['title', 'subtitle', 'items', 'headers', 'link-prefix'],
+  props: ['title', 'subtitle', 'items', 'headers', 'link-prefix', 'type'],
   methods: {
     diskSize(num) {
-      let n = num
-      if (n / 1024 > 1) {
-        n /= 1024
-        if (n / 1024 > 1) {
-          n /= 1024
-          if (n / 1024 > 1) {
-            n /= 1024
-            if (n / 1024 > 1) {
-              n /= 1024
-              if (n / 1024 > 1) {
-                n /= 1024
-                return n.toLocaleString('en-AU', { style: 'unit', unit: 'petabyte'});
-              }
-              return n.toLocaleString('en-AU', { style: 'unit', unit: 'terabyte'});
-            }
-            return n.toLocaleString('en-AU', { style: 'unit', unit: 'gigabyte' });
-          }
-          return n.toLocaleString('en-AU', { style: 'unit', unit: 'megabyte' });
+      let n = num;
+      let typ = "byte";
+      while (n / 1024 > 1) {
+        switch (typ) {
+          case "byte":
+            typ = "kilobyte";
+            break;
+          case "kilobyte":
+            typ = "megabyte";
+            break;
+          case "megabyte":
+            typ = "gigabyte";
+            break;
+          case "gigabyte":
+            typ = "terabyte";
+            break;
+          case "terabyte":
+            typ = "petabyte";
+            break;
         }
-        return n.toLocaleString('en-AU', { style: 'unit', unit: 'kilobyte' });
+        n /= 1024;
       }
-      return n.toLocaleString('en-AU', { style: 'unit', unit: 'byte' });
-    },
+      return n.toLocaleString('en-AU', { style: 'unit', unit: typ });
+   },
     makeHref(val) {
       return this.linkPrefix + val;
     },
-
-    close() {
-      this.editDialog = false;
-      this.removeDialog = false;
-    },
-    edit(name) {
-      // type cannot be changed, remove and create new
-      this.editDialog = true;
-    },
-    remove(name) {
-      this.removeDialog = true;
-    },
+  },
+  components: {
+    ConfigEditDialog,
+    ConfigRemoveDialog,
   },
 };
 </script>

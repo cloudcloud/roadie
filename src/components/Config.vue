@@ -3,11 +3,11 @@
     <v-row>
 
       <v-col cols="6">
-        <ConfigCard title="Destinations" subtitle="Manage any Destination" :items="config.destinations" :headers="headers" link-prefix="/destinations/"></ConfigCard>
+        <ConfigCard title="Destinations" subtitle="Manage any Destination" :items="config.destinations" :headers="headers" link-prefix="/destinations/" type="destination"></ConfigCard>
       </v-col>
 
       <v-col cols="6">
-        <ConfigCard title="Sources" subtitle="Manage any Source" :items="config.sources" :headers="headers" link-prefix="/sources/"></ConfigCard>
+        <ConfigCard title="Sources" subtitle="Manage any Source" :items="config.sources" :headers="headers" link-prefix="/sources/" type="source"></ConfigCard>
       </v-col>
 
     </v-row>
