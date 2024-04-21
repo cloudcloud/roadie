@@ -38,8 +38,8 @@
               <v-card-actions>
                 <v-card-actions>
                   <v-spacer />
-                  <v-btn @click="close">No</v-btn>
-                  <v-btn @click="save" class="error">Yes</v-btn>
+                  <v-btn @click="close" color="primary">No</v-btn>
+                  <v-btn @click="save" color="error">Yes</v-btn>
                 </v-card-actions>
               </v-card-actions>
 
