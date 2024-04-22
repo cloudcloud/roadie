@@ -1,7 +1,8 @@
 <template>
-  <v-card shaped>
-    <v-card-title><span>{{ title }}</span></v-card-title>
-    <v-card-subtitle>{{ subtitle }}</v-card-subtitle>
+  <v-card shaped :title="title" :subtitle="subtitle">
+    <template v-slot:append>
+      <ConfigAddDialog :type="type"></ConfigAddDialog>
+    </template>
 
     <v-card-text>
       <v-data-table-virtual :items="items" :items-per-page="0" :headers="headers" hover no-filter disable-pagination>
@@ -27,11 +28,14 @@
 </template>
 
 <script>
+import ConfigAddDialog from './ConfigAddDialog';
 import ConfigEditDialog from './ConfigEditDialog';
 import ConfigRemoveDialog from './ConfigRemoveDialog';
+import { mdiPlusOutline } from '@mdi/js';
 
 export default {
   data: () => ({
+    mdiPlusOutline,
   }),
   props: ['title', 'subtitle', 'items', 'headers', 'link-prefix', 'type'],
   methods: {
@@ -59,12 +63,13 @@ export default {
         n /= 1024;
       }
       return n.toLocaleString('en-AU', { style: 'unit', unit: typ });
-   },
+    },
     makeHref(val) {
       return this.linkPrefix + val;
     },
   },
   components: {
+    ConfigAddDialog,
     ConfigEditDialog,
     ConfigRemoveDialog,
   },

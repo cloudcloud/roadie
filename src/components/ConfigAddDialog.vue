@@ -1,12 +1,12 @@
 <template>
-  <v-btn @click="edit" small class="mx-1">
-    <v-icon :icon="`${mdiWrenchOutline}`"></v-icon> Edit
+  <v-btn @click="add" variant="text" small color="primary">
+    <v-icon :icon="`${mdiPlusOutline}`"></v-icon> Add
   </v-btn>
 
   <v-dialog v-model="dialog" max-width="500">
     <v-card
-      title="Edit"
-      :subtitle="'Editing ' + name + '.'"
+      title="Add"
+      :subtitle="'Add new ' + type + '.'"
       class="mx-auto">
 
       <v-card-actions>
@@ -19,20 +19,20 @@
 </template>
 
 <script>
-import { mdiWrenchOutline } from '@mdi/js';
+import { mdiPlusOutline } from '@mdi/js';
 
 export default {
   data: () => ({
-    mdiWrenchOutline,
+    mdiPlusOutline,
     dialog: false,
   }),
-  props: ['name', 'fullObj', 'type'],
+  props: ['type'],
   methods: {
+    add() {
+      this.dialog = true;
+    },
     close() {
       this.dialog = false;
-    },
-    edit() {
-      this.dialog = true;
     },
     run() {
     },
