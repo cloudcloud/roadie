@@ -72,6 +72,10 @@ func New(c types.Configer) Server {
 	api.DELETE("/remove", remove)
 	api.GET("/config", config)
 
+	api.POST("/config/add/:type", configAdd)
+	api.PUT("/config/edit/:type/:name", configEdit)
+	api.DELETE("/config/remove/:type/:name", configRemove)
+
 	return &Serve{
 		c: c,
 		g: g,

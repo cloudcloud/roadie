@@ -21,6 +21,77 @@ func config(c *gin.Context) {
 	})
 }
 
+func configAdd(c *gin.Context) {
+	wrap(c, func(ctx *gin.Context, d *data.Data) (any, []string) {
+		t := ctx.Param("type")
+
+		_ = t
+
+		return gin.H{}, []string{}
+	})
+}
+
+func configEdit(c *gin.Context) {
+	wrap(c, func(ctx *gin.Context, d *data.Data) (any, []string) {
+		t, n := ctx.Param("type"), ctx.Param("name")
+
+		switch t {
+		case "source":
+			body := types.Source{}
+			ctx.BindJSON(&body)
+
+			body.Name = sour.FromURL(n)
+			if err := d.UpdateSource(body); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+			return gin.H{"source": body}, []string{}
+
+		case "destination":
+			// TODO: Use types.ActionDestination
+			// types.Destination is the wrapper, not the core of it
+
+			body := types.Destination{}
+			ctx.BindJSON(&body)
+			body.Name = dest.FromURL(n)
+
+			// load the existing destination, override values and store
+			destination := d.GetDestination(n)
+			if destination.Name == "" {
+				return gin.H{}, []string{fmt.Sprintf("Unable to find the '%s' destination", n)}
+			}
+
+			if err := d.UpdateDestination(body); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+			return gin.H{"destination": body}, []string{}
+
+		}
+
+		return gin.H{}, []string{"unknown type provided"}
+	})
+}
+
+func configRemove(c *gin.Context) {
+	wrap(c, func(ctx *gin.Context, d *data.Data) (any, []string) {
+		t, n := ctx.Param("type"), ctx.Param("name")
+
+		switch t {
+		case "source":
+			if err := d.RemoveSource(sour.FromURL(n)); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+
+		case "destination":
+			if err := d.RemoveDestination(dest.FromURL(n)); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+
+		}
+
+		return gin.H{"remove": "success"}, []string{}
+	})
+}
+
 func destination(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
 		n := dest.FromURL(ctx.Param("name"))
