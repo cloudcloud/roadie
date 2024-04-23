@@ -19,11 +19,11 @@
             </v-row>
           </v-card-title>
 
-          <v-data-table :headers="headers" :items="destinations" :search="search" class="elevation-1">
+          <v-data-table-virtual :headers="headers" :items="destinations" :search="search" hover class="elevation-1">
             <template v-slot:item.name="{ item }">
               <router-link :to="item.href">{{ item.name }}</router-link>
             </template>
-          </v-data-table>
+          </v-data-table-virtual>
 
         </v-card>
       </v-col>

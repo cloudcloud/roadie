@@ -3,11 +3,11 @@
     <v-row>
 
       <v-col cols="6">
-        <ConfigCard title="Destinations" subtitle="Manage any Destination" :items="config.destinations" :headers="headers" link-prefix="/destinations/" type="destination"></ConfigCard>
+        <ConfigCard title="Destinations" subtitle="Manage any Destination" :items="config.destinations" link-prefix="/destinations/" type="destination"></ConfigCard>
       </v-col>
 
       <v-col cols="6">
-        <ConfigCard title="Sources" subtitle="Manage any Source" :items="config.sources" :headers="headers" link-prefix="/sources/" type="source"></ConfigCard>
+        <ConfigCard title="Sources" subtitle="Manage any Source" :items="config.sources" link-prefix="/sources/" type="source"></ConfigCard>
       </v-col>
 
     </v-row>
@@ -21,12 +21,6 @@ import ConfigCard from './ConfigCard';
 export default {
   data: () => ({
     config: [],
-    headers: [
-      {title: 'Name', align: 'left', key: 'name'},
-      {title: 'Location', align: 'left', key: 'config.location'},
-      {title: 'Disk Free', align: 'left', key: 'disk_info'},
-      {title: 'Actions', align: 'center', key: 'action'},
-    ],
   }),
   props: [],
   created() {
