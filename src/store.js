@@ -73,6 +73,11 @@ export default createStore({
     },
   },
   actions: {
+    addConfig(_, {type, payload}) {
+      // TODO: Refresh the `type` list
+      return apiClient.addConfig(type, payload)
+    },
+
     getConfig({commit}) {
       return new Promise((resolve) => {
         apiClient.getConfig().then((data) => {

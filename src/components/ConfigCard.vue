@@ -1,7 +1,7 @@
 <template>
   <v-card shaped :title="title" :subtitle="subtitle">
     <template v-slot:append>
-      <ConfigAddDialog :type="type"></ConfigAddDialog>
+      <ConfigAddDialog :addType="type"></ConfigAddDialog>
     </template>
 
     <v-card-text>

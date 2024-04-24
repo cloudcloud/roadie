@@ -7,6 +7,10 @@ const client = axios.create({
 });
 
 const apiClient = {
+  addConfig(type, payload) {
+    return this.perform('post', `/api/v1/config/add/${type}`, payload);
+  },
+
   getConfig() {
     return this.perform('get', '/api/v1/config');
   },
@@ -37,6 +41,10 @@ const apiClient = {
 
   pushCopy(payload) {
     return this.perform('post', '/api/v1/execute', payload);
+  },
+
+  removeFromConfig(type, name) {
+    return this.perform('delete', `/api/v1/config/remove/${type}/${name}`);
   },
 
   removeFile(payload) {
