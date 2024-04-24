@@ -21,6 +21,84 @@ func config(c *gin.Context) {
 	})
 }
 
+func configAdd(c *gin.Context) {
+	wrap(c, func(ctx *gin.Context, d *data.Data) (any, []string) {
+		t := ctx.Param("type")
+
+		switch t {
+		case "destination":
+			body := types.ConfigAddDestination{}
+			ctx.BindJSON(&body)
+			if err := d.AddDestination(dest.CreateNew(body)); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+
+		case "source":
+			body := types.ConfigAddSource{}
+			ctx.BindJSON(&body)
+			if err := d.AddSource(sour.CreateNew(body)); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+
+		}
+
+		return gin.H{}, []string{}
+	})
+}
+
+func configEdit(c *gin.Context) {
+	wrap(c, func(ctx *gin.Context, d *data.Data) (any, []string) {
+		t, n := ctx.Param("type"), ctx.Param("name")
+
+		switch t {
+		case "source":
+			body := types.ConfigAddSource{}
+			ctx.BindJSON(&body)
+
+			updated := sour.UpdateExisting(body, d.GetSource(n))
+			if err := d.UpdateSource(updated); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+			return gin.H{"source": updated}, []string{}
+
+		case "destination":
+			body := types.ConfigAddDestination{}
+			ctx.BindJSON(&body)
+
+			// load the existing destination, override values and store
+			updated := dest.UpdateExisting(body, d.GetDestination(n))
+			if err := d.UpdateDestination(updated); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+			return gin.H{"destination": updated}, []string{}
+
+		}
+
+		return gin.H{}, []string{"unknown type provided"}
+	})
+}
+
+func configRemove(c *gin.Context) {
+	wrap(c, func(ctx *gin.Context, d *data.Data) (any, []string) {
+		t, n := ctx.Param("type"), ctx.Param("name")
+
+		switch t {
+		case "source":
+			if err := d.RemoveSource(sour.FromURL(n)); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+
+		case "destination":
+			if err := d.RemoveDestination(dest.FromURL(n)); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+
+		}
+
+		return gin.H{"remove": "success"}, []string{}
+	})
+}
+
 func destination(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (interface{}, []string) {
 		n := dest.FromURL(ctx.Param("name"))

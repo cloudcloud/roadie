@@ -15,3 +15,19 @@ type Reference struct {
 	SubPath string `json:"sub_path,omitempty"`
 	Entry   string `json:"entry"`
 }
+
+// ConfigAddDestination defines the input required for creating a new Destination.
+type ConfigAddDestination struct {
+	Name string `json:"name"`
+	Type string `json:"type"`
+	Path string `json:"path"`
+}
+
+// ConfigAddSource defines the input required for creating a new Source.
+type ConfigAddSource struct {
+	Name   string `json:"name"`
+	Type   string `json:"type"`
+	Path   string `json:"path"`
+	Bucket string `json:"bucket"`
+	Depth  int    `json:"depth"`
+}

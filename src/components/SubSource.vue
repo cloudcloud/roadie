@@ -1,7 +1,9 @@
 <template>
   <v-data-table :items="sub_source.entries" :items-per-page="0" :headers="headers" hover no-filter disable-pagination hide-default-header>
     <template v-slot:item.action="{ item }">
-      <CopyDialog :source_name="source_name" :entry_name="sub_name + '/' + item.entry + '/'" />
+      <div width="100%" align="right">
+        <CopyDialog :source_name="source_name" :entry_name="sub_name + '/' + item.entry + '/'" />
+      </div>
     </template>
     <template v-slot:headers="{ }"><!-- skip! --></template>
     <template #bottom></template>
@@ -18,7 +20,7 @@ export default {
     mdiMagnify,
     headers: [
       {sortable: false, key: 'entry'},
-      {sortable: false, key: 'action'},
+      {sortable: false, key: 'action', width: '10%'},
     ],
     sub_source: {},
     entry: '',

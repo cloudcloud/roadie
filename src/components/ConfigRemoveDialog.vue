@@ -7,6 +7,7 @@
     <v-card
       title="Remove"
       :subtitle="'Removing ' + name + '. Are you sure?'"
+      :loading="loading"
       class="mx-auto">
 
       <v-card-actions>
@@ -25,6 +26,7 @@ export default {
   data: () => ({
     mdiTrashCanOutline,
     dialog: false,
+    loading: false,
   }),
   props: ['name', 'fullObj', 'type'],
   methods: {
@@ -35,6 +37,14 @@ export default {
       this.dialog = true;
     },
     run() {
+      this.loading = true;
+      this.$store.dispatch('removeFromConfig', {
+        type: this.type,
+        name: this.name,
+      }).then(() => {
+        this.loading = false;
+        this.close();
+      });
     },
   },
 };

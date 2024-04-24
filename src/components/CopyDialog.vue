@@ -1,5 +1,5 @@
 <template>
-  <v-btn block small @click="copy">
+  <v-btn small @click="copy" align="right">
     <v-icon :icon="`${mdiContentCopy}`"></v-icon> Copy
   </v-btn>
 

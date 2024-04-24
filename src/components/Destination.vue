@@ -19,11 +19,13 @@
             </v-row>
           </v-card-title>
 
-          <v-data-table :headers="headers" :items="destination.entries" :search="search" class="elevation-1">
+          <v-data-table :headers="headers" :items="destination.entries" :search="search" class="elevation-1" height="100%" items-per-page="20" hover>
             <template v-slot:item.action="{ item }">
-              <v-btn block small @click="remove(item.entry)">
-                <v-icon :icon="`${mdiTrashCanOutline}`"></v-icon> Remove
-              </v-btn>
+              <div width="100%" align="right">
+                <v-btn block small @click="remove(item.entry)" color="error">
+                  <v-icon :icon="`${mdiTrashCanOutline}`"></v-icon> Remove
+                </v-btn>
+              </div>
             </template>
           </v-data-table>
 
@@ -66,7 +68,7 @@ export default {
     mdiTrashCanOutline,
     headers: [
       {title: 'Name', align: 'left', key: 'entry'},
-      {title: 'Actions', key: 'action'},
+      {title: 'Actions', align: 'right', key: 'action', sortable: false, width: '10%'},
     ],
     destination: {},
     dialog: false,

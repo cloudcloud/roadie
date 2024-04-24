@@ -17,7 +17,7 @@
             </v-row>
           </v-card-title>
 
-          <v-data-table :headers="headers" :items="historical" :search="search" class="elevation-1">
+          <v-data-table :headers="headers" :items="historical" :search="search" class="elevation-1" hover height="100%" items-per-page="20">
             <template v-slot:item.source.name="{ item }">
               <router-link :to="item.source.href">{{ item.source.name }}</router-link>
             </template>

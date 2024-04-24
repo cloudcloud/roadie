@@ -22,6 +22,55 @@ func New(t string, c types.Configer) types.Sourcer {
 	return nil
 }
 
+// CreateNew will take a submission and prepare for utilisation.
+func CreateNew(s types.ConfigAddSource) types.Source {
+	n := types.Source{
+		Href: sourceURL(s.Name),
+		Name: s.Name,
+		Type: s.Type,
+	}
+
+	switch s.Type {
+	case "local_path":
+		n.Store = &LocalPath{Location: s.Path}
+		blob, _ := json.Marshal(n.Store)
+		n.Config = blob
+
+	case "s3":
+		n.Store = &S3{Bucket: s.Bucket, Path: s.Path, Depth: s.Depth}
+		blob, _ := json.Marshal(n.Store)
+		n.Config = blob
+
+	}
+
+	return n
+}
+
+// UpdateExisting will take a new and existing source, generating a new one that
+// combines the editable details with the existing others.
+func UpdateExisting(e types.ConfigAddSource, s types.Source) types.Source {
+	n := types.Source{
+		Href: sourceURL(s.Name),
+		Name: s.Name,
+		Type: s.Type,
+	}
+
+	switch s.Type {
+	case "local_path":
+		n.Store = &LocalPath{Location: e.Path}
+		blob, _ := json.Marshal(n.Store)
+		n.Config = blob
+
+	case "s3":
+		n.Store = &S3{Bucket: e.Bucket, Path: e.Path, Depth: e.Depth}
+		blob, _ := json.Marshal(n.Store)
+		n.Config = blob
+
+	}
+
+	return n
+}
+
 // FromURL will take an expected source name from an external location
 // and turn it into what can be assumed as the internal reference.
 func FromURL(n string) string {

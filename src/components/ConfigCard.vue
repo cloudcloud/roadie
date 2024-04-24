@@ -1,7 +1,7 @@
 <template>
   <v-card shaped :title="title" :subtitle="subtitle">
     <template v-slot:append>
-      <ConfigAddDialog :type="type"></ConfigAddDialog>
+      <ConfigAddDialog :addType="type"></ConfigAddDialog>
     </template>
 
     <v-card-text>
@@ -36,8 +36,14 @@ import { mdiPlusOutline } from '@mdi/js';
 export default {
   data: () => ({
     mdiPlusOutline,
+    headers: [
+      {title: 'Name', align: 'left', key: 'name'},
+      {title: 'Location', align: 'left', key: 'config.location'},
+      {title: 'Disk Free', align: 'left', key: 'disk_info'},
+      {title: 'Actions', align: 'center', key: 'action', sortable: false},
+    ],
   }),
-  props: ['title', 'subtitle', 'items', 'headers', 'link-prefix', 'type'],
+  props: ['title', 'subtitle', 'items', 'link-prefix', 'type'],
   methods: {
     diskSize(num) {
       let n = num;

@@ -4,6 +4,7 @@ package data
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"time"
 
@@ -17,6 +18,10 @@ const (
 	StateSuccess = "success"
 	StateFail    = "fail"
 	StateUnknown = "unknown"
+
+	StateAdded         = "[added]"
+	StateRemoved       = "[removed]"
+	StateFailedRemoval = "[not-removed]"
 )
 
 // Data is the base store for working with all data, containing the configuration
@@ -63,6 +68,18 @@ func New(c types.Configer) *Data {
 	return d
 }
 
+// AddDestination will add a new destination to the list of those available.
+func (d *Data) AddDestination(n types.Destination) error {
+	for _, x := range d.Content.Destinations {
+		if x.Name == n.Name {
+			return fmt.Errorf("Destination '%s' already exists.", x.Name)
+		}
+	}
+
+	d.Content.Destinations = append(d.Content.Destinations, n)
+	return d.AddHistory(types.Source{Name: StateAdded}, n, n.Name, StateSuccess)
+}
+
 // AddHistory will accept some detail about a particular event that has occured.
 func (d *Data) AddHistory(s types.Source, t types.Destination, e string, state string) error {
 	h := types.History{
@@ -75,6 +92,18 @@ func (d *Data) AddHistory(s types.Source, t types.Destination, e string, state s
 
 	d.Content.Histories = append(d.Content.Histories, h)
 	return d.Write()
+}
+
+// AddSource will add a new source to the list of those available.
+func (d *Data) AddSource(n types.Source) error {
+	for _, x := range d.Content.Sources {
+		if x.Name == n.Name {
+			return fmt.Errorf("Source '%s' already exists.", x.Name)
+		}
+	}
+
+	d.Content.Sources = append(d.Content.Sources, n)
+	return d.AddHistory(n, types.Destination{Name: StateAdded}, n.Name, StateSuccess)
 }
 
 // Copy will carry out a copy operation based on the incoming execution request.
@@ -175,6 +204,84 @@ func (d *Data) RemoveFile(b types.RemovePayload) error {
 	}
 
 	return err
+}
+
+// RemoveDestination will take a specific destination name and remove it from our list.
+func (d *Data) RemoveDestination(s string) error {
+	dest := d.GetDestination(s)
+	if dest.Name == s && s != "" {
+		tmpDests := []types.Destination{}
+		dests := d.Content.Destinations
+
+		for _, x := range dests {
+			if x.Name != s {
+				tmpDests = append(tmpDests, x)
+			}
+		}
+
+		d.Content.Destinations = tmpDests
+
+		d.AddHistory(types.Source{}, dest, StateRemoved, StateSuccess)
+		return nil
+	}
+
+	d.AddHistory(types.Source{}, types.Destination{Name: s}, StateFailedRemoval, StateFail)
+	return fmt.Errorf("Could not find the '%s' destination to remove.", s)
+}
+
+// RemoveSource will take a specific source name and remove it from our list.
+func (d *Data) RemoveSource(s string) error {
+	source := d.GetSource(s)
+	if source.Name == s && s != "" {
+		tmpSources := []types.Source{}
+		sources := d.Content.Sources
+
+		for _, x := range sources {
+			if x.Name != s {
+				tmpSources = append(tmpSources, x)
+			}
+		}
+
+		d.Content.Sources = tmpSources
+		d.AddHistory(source, types.Destination{}, StateRemoved, StateSuccess)
+		return nil
+	}
+
+	d.AddHistory(types.Source{Name: s}, types.Destination{}, StateFailedRemoval, StateFail)
+	return fmt.Errorf("Could not find the '%s' source to remove.", s)
+}
+
+// UpdateDestination will take a copy of a Destination and replace it internally
+// based on the Name.
+func (d *Data) UpdateDestination(b types.Destination) error {
+	if b.Name == "" {
+		return fmt.Errorf("Invalid destination name '%s' provided.", b.Name)
+	}
+
+	for idx, x := range d.Content.Destinations {
+		if x.Name == b.Name {
+			d.Content.Destinations[idx] = b
+			return nil
+		}
+	}
+
+	return fmt.Errorf("Unable to find destination '%s'.", b.Name)
+}
+
+// UpdateSource will take a copy of a Source and replace it internally based on the Name.
+func (d *Data) UpdateSource(s types.Source) error {
+	if s.Name == "" {
+		return fmt.Errorf("Invalid source name '%s' provided.", s.Name)
+	}
+
+	for idx, x := range d.Content.Sources {
+		if x.Name == s.Name {
+			d.Content.Sources[idx] = s
+			return nil
+		}
+	}
+
+	return fmt.Errorf("Unable to find source '%s'.", s.Name)
 }
 
 // Write will take all loaded configuration data and write it back to the provided

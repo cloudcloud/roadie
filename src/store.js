@@ -73,6 +73,15 @@ export default createStore({
     },
   },
   actions: {
+    addConfig(_, {type, payload}) {
+      // TODO: Refresh the `type` list
+      return apiClient.addConfig(type, payload);
+    },
+
+    editConfig(_, {type, name, payload}) {
+      return apiClient.editConfig(type, name, payload);
+    },
+
     getConfig({commit}) {
       return new Promise((resolve) => {
         apiClient.getConfig().then((data) => {
@@ -140,6 +149,10 @@ export default createStore({
       return apiClient.pushCopy(payload).then((data) => {
         commit('resetCopy', data.items);
       });
+    },
+
+    removeFromConfig(_, {type, name}) {
+      return apiClient.removeFromConfig(type, name);
     },
 
     removeFile(_, payload) {

@@ -17,7 +17,7 @@
             </v-row>
           </v-card-title>
 
-          <v-data-table-virtual :headers="headers" :items="sources" :search="search" class="elevation-1">
+          <v-data-table-virtual :headers="headers" :items="sources" :search="search" class="elevation-1" hover>
             <template v-slot:item.name="{ item }">
               <router-link :to="item.href">{{ item.name }}</router-link>
             </template>
