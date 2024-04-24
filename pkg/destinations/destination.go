@@ -20,6 +20,26 @@ func New(t string, c types.Configer) types.Destinationer {
 	return nil
 }
 
+// CreateNew will take a submission and prepare for utilisation.
+func CreateNew(d types.ConfigAddDestination) types.Destination {
+	n := types.Destination{
+		Href: destinationURL(d.Name),
+		Name: d.Name,
+		Type: d.Type,
+	}
+
+	// load the type specific portion, store it, pass it through
+	switch d.Type {
+	case "local_path":
+		n.Store = &LocalPath{Location: d.Path}
+
+		blob, _ := json.Marshal(n.Store)
+		n.Config = blob
+	}
+
+	return n
+}
+
 // FromURL will take an input destination and convert it to the known name.
 func FromURL(u string) string {
 	x, _ := url.PathUnescape(u)

@@ -19,6 +19,7 @@ const (
 	StateFail    = "fail"
 	StateUnknown = "unknown"
 
+	StateAdded         = "[added]"
 	StateRemoved       = "[removed]"
 	StateFailedRemoval = "[not-removed]"
 )
@@ -67,6 +68,18 @@ func New(c types.Configer) *Data {
 	return d
 }
 
+// AddDestination will add a new destination to the list of those available.
+func (d *Data) AddDestination(n types.Destination) error {
+	for _, x := range d.Content.Destinations {
+		if x.Name == n.Name {
+			return fmt.Errorf("Destination '%s' already exists.", x.Name)
+		}
+	}
+
+	d.Content.Destinations = append(d.Content.Destinations, n)
+	return d.AddHistory(types.Source{Name: StateAdded}, n, n.Name, StateSuccess)
+}
+
 // AddHistory will accept some detail about a particular event that has occured.
 func (d *Data) AddHistory(s types.Source, t types.Destination, e string, state string) error {
 	h := types.History{
@@ -79,6 +92,18 @@ func (d *Data) AddHistory(s types.Source, t types.Destination, e string, state s
 
 	d.Content.Histories = append(d.Content.Histories, h)
 	return d.Write()
+}
+
+// AddSource will add a new source to the list of those available.
+func (d *Data) AddSource(n types.Source) error {
+	for _, x := range d.Content.Sources {
+		if x.Name == n.Name {
+			return fmt.Errorf("Source '%s' already exists.", x.Name)
+		}
+	}
+
+	d.Content.Sources = append(d.Content.Sources, n)
+	return d.AddHistory(n, types.Destination{Name: StateAdded}, n.Name, StateSuccess)
 }
 
 // Copy will carry out a copy operation based on the incoming execution request.

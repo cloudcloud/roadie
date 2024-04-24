@@ -25,7 +25,22 @@ func configAdd(c *gin.Context) {
 	wrap(c, func(ctx *gin.Context, d *data.Data) (any, []string) {
 		t := ctx.Param("type")
 
-		_ = t
+		switch t {
+		case "destination":
+			body := types.ConfigAddDestination{}
+			ctx.BindJSON(&body)
+			if err := d.AddDestination(dest.CreateNew(body)); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+
+		case "source":
+			body := types.ConfigAddSource{}
+			ctx.BindJSON(&body)
+			if err := d.AddSource(sour.CreateNew(body)); err != nil {
+				return gin.H{}, []string{err.Error()}
+			}
+
+		}
 
 		return gin.H{}, []string{}
 	})
