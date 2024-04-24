@@ -11,8 +11,8 @@ const apiClient = {
     return this.perform('post', `/api/v1/config/add/${type}`, payload);
   },
 
-  editConfig(type, payload) {
-    return this.perform('put', `/api/v1/config/edit/${type}`, payload);
+  editConfig(type, name, payload) {
+    return this.perform('put', `/api/v1/config/edit/${type}/${name}`, payload);
   },
 
   getConfig() {

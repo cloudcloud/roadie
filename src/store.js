@@ -78,8 +78,8 @@ export default createStore({
       return apiClient.addConfig(type, payload);
     },
 
-    editConfig(_, {type, payload}) {
-      return apiClient.editConfig(type, payload);
+    editConfig(_, {type, name, payload}) {
+      return apiClient.editConfig(type, name, payload);
     },
 
     getConfig({commit}) {

@@ -96,6 +96,7 @@ export default {
       };
       this.$store.dispatch('editConfig', {
         type: this.type,
+        name: payload.name,
         payload: payload,
       }).then(() => {
         this.loading = false;
