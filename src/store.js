@@ -75,7 +75,11 @@ export default createStore({
   actions: {
     addConfig(_, {type, payload}) {
       // TODO: Refresh the `type` list
-      return apiClient.addConfig(type, payload)
+      return apiClient.addConfig(type, payload);
+    },
+
+    editConfig(_, {type, payload}) {
+      return apiClient.editConfig(type, payload);
     },
 
     getConfig({commit}) {
