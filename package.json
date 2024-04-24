@@ -8,12 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.2.6",
+    "@vue/compiler-sfc": "3.4.24",
     "axios": "1.6.8",
     "elliptic": "6.5.5",
     "sass": "1.75.0",
     "sass-loader": "14.2.1",
-    "vue": "^3.4.23",
+    "vue": "3.4.24",
     "vue-router": "4.3.2",
     "vuetify": "^3.5.16",
     "vuex": "4.1.0",
@@ -27,7 +27,7 @@
     "@vue/cli-plugin-babel": "5.0.8",
     "@vue/cli-service": "5.0.8",
     "babel-eslint": "^10.0.1",
-    "eslint": "9.0.0",
+    "eslint": "9.1.1",
     "eslint-plugin-vue": "9.25.0",
     "stylus": "0.63.0",
     "stylus-loader": "8.1.0",
