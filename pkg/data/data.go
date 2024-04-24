@@ -254,12 +254,34 @@ func (d *Data) RemoveSource(s string) error {
 // UpdateDestination will take a copy of a Destination and replace it internally
 // based on the Name.
 func (d *Data) UpdateDestination(b types.Destination) error {
-	return nil
+	if b.Name == "" {
+		return fmt.Errorf("Invalid destination name '%s' provided.", b.Name)
+	}
+
+	for idx, x := range d.Content.Destinations {
+		if x.Name == b.Name {
+			d.Content.Destinations[idx] = b
+			return nil
+		}
+	}
+
+	return fmt.Errorf("Unable to find destination '%s'.", b.Name)
 }
 
 // UpdateSource will take a copy of a Source and replace it internally based on the Name.
 func (d *Data) UpdateSource(s types.Source) error {
-	return nil
+	if s.Name == "" {
+		return fmt.Errorf("Invalid source name '%s' provided.", s.Name)
+	}
+
+	for idx, x := range d.Content.Sources {
+		if x.Name == s.Name {
+			d.Content.Sources[idx] = s
+			return nil
+		}
+	}
+
+	return fmt.Errorf("Unable to find source '%s'.", s.Name)
 }
 
 // Write will take all loaded configuration data and write it back to the provided

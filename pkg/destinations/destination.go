@@ -32,9 +32,9 @@ func CreateNew(d types.ConfigAddDestination) types.Destination {
 	switch d.Type {
 	case "local_path":
 		n.Store = &LocalPath{Location: d.Path}
-
 		blob, _ := json.Marshal(n.Store)
 		n.Config = blob
+
 	}
 
 	return n
@@ -69,6 +69,26 @@ func PrepareDestination(d types.Destination) (o types.Destination) {
 	o.Config = json.RawMessage(b)
 
 	return
+}
+
+// UpdateExisting will take a new and an existing destination, generating a new one
+// that combines the editable details with the existing others.
+func UpdateExisting(d types.ConfigAddDestination, e types.Destination) types.Destination {
+	n := types.Destination{
+		Href: destinationURL(e.Name),
+		Name: e.Name,
+		Type: e.Type,
+	}
+
+	switch e.Type {
+	case "local_path":
+		n.Store = &LocalPath{Location: d.Path}
+		blob, _ := json.Marshal(n.Store)
+		n.Config = blob
+
+	}
+
+	return n
 }
 
 func destinationURL(l string) string {

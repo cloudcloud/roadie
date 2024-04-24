@@ -52,33 +52,25 @@ func configEdit(c *gin.Context) {
 
 		switch t {
 		case "source":
-			body := types.Source{}
+			body := types.ConfigAddSource{}
 			ctx.BindJSON(&body)
 
-			body.Name = sour.FromURL(n)
-			if err := d.UpdateSource(body); err != nil {
+			updated := sour.UpdateExisting(body, d.GetSource(n))
+			if err := d.UpdateSource(updated); err != nil {
 				return gin.H{}, []string{err.Error()}
 			}
-			return gin.H{"source": body}, []string{}
+			return gin.H{"source": updated}, []string{}
 
 		case "destination":
-			// TODO: Use types.ActionDestination
-			// types.Destination is the wrapper, not the core of it
-
-			body := types.Destination{}
+			body := types.ConfigAddDestination{}
 			ctx.BindJSON(&body)
-			body.Name = dest.FromURL(n)
 
 			// load the existing destination, override values and store
-			destination := d.GetDestination(n)
-			if destination.Name == "" {
-				return gin.H{}, []string{fmt.Sprintf("Unable to find the '%s' destination", n)}
-			}
-
-			if err := d.UpdateDestination(body); err != nil {
+			updated := dest.UpdateExisting(body, d.GetDestination(n))
+			if err := d.UpdateDestination(updated); err != nil {
 				return gin.H{}, []string{err.Error()}
 			}
-			return gin.H{"destination": body}, []string{}
+			return gin.H{"destination": updated}, []string{}
 
 		}
 
