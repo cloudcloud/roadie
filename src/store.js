@@ -147,6 +147,10 @@ export default createStore({
       });
     },
 
+    removeFromConfig(_, {type, name}) {
+      return apiClient.removeFromConfig(type, name);
+    },
+
     removeFile(_, payload) {
       return apiClient.removeFile(payload);
     },

@@ -38,7 +38,10 @@ export default {
     },
     run() {
       this.loading = true;
-      this.$store.dispatch('removeFromConfig', type, name).then(() => {
+      this.$store.dispatch('removeFromConfig', {
+        type: this.type,
+        name: this.name,
+      }).then(() => {
         this.loading = false;
         this.close();
       });
