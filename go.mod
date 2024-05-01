@@ -3,7 +3,7 @@ module github.com/cloudcloud/roadie
 go 1.22
 
 require (
-	github.com/aws/aws-sdk-go v1.51.26
+	github.com/aws/aws-sdk-go v1.51.32
 	github.com/gin-contrib/cors v1.7.1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang/mock v1.6.0
