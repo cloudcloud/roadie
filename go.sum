@@ -1,7 +1,5 @@
-github.com/aws/aws-sdk-go v1.51.24 h1:nwL5MaommPkwb7Ixk24eWkdx5HY4of1gD10kFFVAl6A=
-github.com/aws/aws-sdk-go v1.51.24/go.mod h1:LF8svs817+Nz+DmiMQKTO3ubZ/6IaTpq3TjupRn3Eqk=
-github.com/aws/aws-sdk-go v1.51.26 h1:fYud+95lh9B89fAlRtgYpY8CcJF4T7JrWkLMq4GGCOo=
-github.com/aws/aws-sdk-go v1.51.26/go.mod h1:LF8svs817+Nz+DmiMQKTO3ubZ/6IaTpq3TjupRn3Eqk=
+github.com/aws/aws-sdk-go v1.53.12 h1:8f8K+YaTy2qwtGwVIo2Ftq22UCH96xQAX7Q0lyZKDiA=
+github.com/aws/aws-sdk-go v1.53.12/go.mod h1:LF8svs817+Nz+DmiMQKTO3ubZ/6IaTpq3TjupRn3Eqk=
 github.com/bytedance/sonic v1.11.5-alpha3 h1:sxepBMt+5mb0YQZOAzXYOiUQ5D4+EWqOfnklxyZRofQ=
 github.com/bytedance/sonic v1.11.5-alpha3/go.mod h1:NYwWBqBszgmWi7sDnT+p6Yj1Jwf2gzpN0UY7R3VYH+c=
 github.com/cloudwego/base64x v0.1.2-alpha3/go.mod h1:jSIw/Ru6lyma8wP6MbQJ+7ZAgXkHthTuuClUTUxcYwY=
