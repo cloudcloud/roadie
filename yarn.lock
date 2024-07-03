@@ -6170,10 +6170,10 @@ vue@3.4.24:
     "@vue/server-renderer" "3.4.24"
     "@vue/shared" "3.4.24"
 
-vuetify@^3.5.16:
-  version "3.5.16"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.5.16.tgz#5046aab39bfa536f0d99c5be4f9d91a7245c3246"
-  integrity sha512-jyApfATreFMkgjvK0bL7ntZnr+p9TU73+4E3kX6fIvUitdAP9fltG7yj+v3k14HLqZRSNhTL1GhQ95DFx631zw==
+vuetify@^3.6.11:
+  version "3.6.11"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.6.11.tgz#98c18afbe0abccf7bf4a29fc7de2a06630ad5726"
+  integrity sha512-DMreVZ6+WCVnvRoFVPGtC+Kc4afx+etcTLgX2AqUj6lQ4RrEx0TlQoNAW1oKPH4eViv2wfdvQ3xb/Yw1c86cTw==
 
 vuex@4.1.0:
   version "4.1.0"
