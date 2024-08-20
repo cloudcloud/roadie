@@ -119,20 +119,33 @@ func (s *S3) GetRefs() (r []types.Reference) {
 		delim = "/"
 	}
 
-	in := &s3.ListObjectsV2Input{
-		Bucket:    aws.String(s.Bucket),
-		Delimiter: aws.String(delim),
-		MaxKeys:   aws.Int64(1000),
-		Prefix:    aws.String(prefix),
-	}
+	truncated := true
+	token := ""
+	for truncated {
+		in := &s3.ListObjectsV2Input{
+			Bucket:    aws.String(s.Bucket),
+			Delimiter: aws.String(delim),
+			MaxKeys:   aws.Int64(1000),
+			Prefix:    aws.String(prefix),
+		}
+		if token != "" {
+			in.ContinuationToken = aws.String(token)
+		}
 
-	res, err := s.s3.ListObjectsV2(in)
-	if err != nil {
-		s.c.GetLogger().With("error_message", err).Error("Could not retrieve refs from S3.")
-	}
+		res, err := s.s3.ListObjectsV2(in)
+		if err != nil {
+			s.c.GetLogger().With("error_message", err).Error("Could not retrieve refs from S3.")
+			break
+		}
 
-	for _, x := range res.CommonPrefixes {
-		r = append(r, types.Reference{Entry: strings.TrimSuffix(strings.TrimPrefix(*x.Prefix, prefix), delim)})
+		for _, x := range res.CommonPrefixes {
+			r = append(r, types.Reference{Entry: strings.TrimSuffix(strings.TrimPrefix(*x.Prefix, prefix), delim)})
+		}
+
+		truncated = *res.IsTruncated
+		if truncated {
+			token = *res.NextContinuationToken
+		}
 	}
 
 	return
