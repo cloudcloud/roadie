@@ -12,7 +12,7 @@
     "axios": "1.7.2",
     "elliptic": "6.5.7",
     "sass": "1.77.8",
-    "sass-loader": "14.2.1",
+    "sass-loader": "16.0.1",
     "vue": "3.4.33",
     "vue-router": "4.4.3",
     "vuetify": "^3.6.13",
