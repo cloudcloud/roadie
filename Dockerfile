@@ -1,8 +1,8 @@
-FROM node:slim AS fe
+FROM node:21-slim AS fe
 WORKDIR /app
 
 COPY . .
-RUN yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
+RUN yarn && yarn build
 
 FROM golang:alpine AS be
 
