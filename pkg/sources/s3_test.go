@@ -84,7 +84,10 @@ func TestGetRefsEmptyResponse(t *testing.T) {
 	defer ctrl.Finish()
 
 	s3mock := NewMockS3API(ctrl)
-	s3mock.EXPECT().ListObjectsV2(gomock.Any()).Times(1).Return(&s3.ListObjectsV2Output{}, nil)
+	s3mock.EXPECT().ListObjectsV2(gomock.Any()).Times(1).Return(&s3.ListObjectsV2Output{
+		CommonPrefixes: []*s3.CommonPrefix{},
+		IsTruncated:    aws.Bool(false),
+	}, nil)
 
 	assert.NotPanics(func() {
 		s := &S3{Bucket: "bucket", Path: "/", s3: s3mock}
@@ -106,6 +109,7 @@ func TestGetRefsBasicResponse(t *testing.T) {
 				Prefix: aws.String("prefix/"),
 			},
 		},
+		IsTruncated: aws.Bool(false),
 	}, nil)
 
 	assert.NotPanics(func() {
