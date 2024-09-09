@@ -8,14 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "3.4.38",
-    "axios": "1.7.4",
+    "@vue/compiler-sfc": "3.5.3",
+    "axios": "1.7.7",
     "elliptic": "6.5.7",
     "sass": "1.77.8",
     "sass-loader": "16.0.1",
-    "vue": "3.4.38",
+    "vue": "3.5.3",
     "vue-router": "4.4.3",
-    "vuetify": "^3.7.0",
+    "vuetify": "^3.7.1",
     "vuex": "4.1.0",
     "webpack": "5.94.0",
     "webpack-plugin-vuetify": "^3.0.3",
