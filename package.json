@@ -28,7 +28,7 @@
     "@vue/cli-service": "5.0.8",
     "babel-eslint": "^10.0.1",
     "eslint": "9.9.0",
-    "eslint-plugin-vue": "9.27.0",
+    "eslint-plugin-vue": "9.28.0",
     "stylus": "0.63.0",
     "stylus-loader": "8.1.0",
     "vue-template-compiler": "^2.7.16"
