@@ -12,6 +12,7 @@ import (
 	"github.com/cloudcloud/roadie/pkg/info"
 	"github.com/cloudcloud/roadie/pkg/sources"
 	"github.com/cloudcloud/roadie/pkg/types"
+	humanize "github.com/dustin/go-humanize"
 )
 
 const (
@@ -154,7 +155,7 @@ func (d *Data) GetDestinationsWithDetails() []any {
 			"href":      v.Href,
 			"name":      v.Name,
 			"type":      v.Type,
-			"disk_info": info.DiskDetails(v.Store.GetLocation()),
+			"disk_free": humanize.Bytes(info.DiskDetails(v.Store.GetLocation()).Free), // disk.GetInfo(v.Store.GetLocation())),
 		})
 	}
 
