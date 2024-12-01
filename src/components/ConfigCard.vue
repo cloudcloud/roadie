@@ -17,8 +17,8 @@
           <router-link :to="makeHref(item.name)">{{ item.name }}</router-link>
         </template>
 
-        <template v-slot:item.disk_info="{ item }">
-          <strong v-if="item.disk_info">{{ diskSize(item.disk_info.free) }}</strong>
+        <template v-slot:item.disk_free="{ item }">
+          <strong v-if="item.disk_free">{{ item.disk_free }}</strong>
         </template>
 
         <template #bottom></template>
@@ -39,37 +39,12 @@ export default {
     headers: [
       {title: 'Name', align: 'left', key: 'name'},
       {title: 'Location', align: 'left', key: 'config.location'},
-      {title: 'Disk Free', align: 'left', key: 'disk_info'},
+      {title: 'Disk Free', align: 'left', key: 'disk_free'},
       {title: 'Actions', align: 'center', key: 'action', sortable: false},
     ],
   }),
   props: ['title', 'subtitle', 'items', 'link-prefix', 'type'],
   methods: {
-    diskSize(num) {
-      let n = num;
-      let typ = "byte";
-      while (n / 1024 > 1) {
-        switch (typ) {
-          case "byte":
-            typ = "kilobyte";
-            break;
-          case "kilobyte":
-            typ = "megabyte";
-            break;
-          case "megabyte":
-            typ = "gigabyte";
-            break;
-          case "gigabyte":
-            typ = "terabyte";
-            break;
-          case "terabyte":
-            typ = "petabyte";
-            break;
-        }
-        n /= 1024;
-      }
-      return n.toLocaleString('en-AU', { style: 'unit', unit: typ });
-    },
     makeHref(val) {
       return this.linkPrefix + val;
     },

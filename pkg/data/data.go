@@ -9,9 +9,10 @@ import (
 	"time"
 
 	"github.com/cloudcloud/roadie/pkg/destinations"
-	"github.com/cloudcloud/roadie/pkg/info"
 	"github.com/cloudcloud/roadie/pkg/sources"
 	"github.com/cloudcloud/roadie/pkg/types"
+	humanize "github.com/dustin/go-humanize"
+	"github.com/shirou/gopsutil/v4/disk"
 )
 
 const (
@@ -149,12 +150,17 @@ func (d *Data) GetDestinationsWithDetails() []any {
 
 	destinations := d.Content.Destinations
 	for _, v := range destinations {
+		usage, err := disk.Usage(v.Store.GetLocation())
+		if err != nil {
+			d.c.GetLogger().With("error_message", err, "path", v.Store.GetLocation()).Error("Unable to determine free disk space.")
+		}
+
 		output = append(output, map[string]interface{}{
 			"config":    v.Config,
 			"href":      v.Href,
 			"name":      v.Name,
 			"type":      v.Type,
-			"disk_info": info.DiskDetails(v.Store.GetLocation()),
+			"disk_free": humanize.Bytes(usage.Free),
 		})
 	}
 
