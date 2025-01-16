@@ -3,7 +3,7 @@ module github.com/cloudcloud/roadie
 go 1.23.3
 
 require (
-	github.com/aws/aws-sdk-go v1.55.5
+	github.com/aws/aws-sdk-go v1.55.6
 	github.com/dustin/go-humanize v1.0.1
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-gonic/gin v1.10.0
