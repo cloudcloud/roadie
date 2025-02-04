@@ -18,7 +18,7 @@
     "vuetify": "^3.7.11",
     "vuex": "4.1.0",
     "webpack": "5.97.1",
-    "webpack-plugin-vuetify": "^3.0.3",
+    "webpack-plugin-vuetify": "^3.1.0",
     "y18n": "5.0.8"
   },
   "devDependencies": {
