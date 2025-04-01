@@ -1,14 +1,13 @@
 module github.com/cloudcloud/roadie
 
 go 1.23.3
-
 require (
 	github.com/aws/aws-sdk-go v1.55.6
 	github.com/dustin/go-humanize v1.0.1
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang/mock v1.6.0
-	github.com/shirou/gopsutil/v4 v4.25.1
+	github.com/shirou/gopsutil/v4 v4.25.3
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/zap v1.27.0
 )
