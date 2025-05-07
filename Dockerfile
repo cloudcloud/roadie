@@ -1,4 +1,4 @@
-FROM node:23-slim AS fe
+FROM node:24-slim AS fe
 WORKDIR /app
 
 COPY . .
